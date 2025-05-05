@@ -9,7 +9,7 @@
     <h1>ログインページ</h1>
     <% if (error) { %>
         <div class="error-message"><%= error %></div>
-      <% } %>
+    <% } %>
     <form action="/auth/login" method="post" >
         <label for="id">id</label>
         <input type="text" name="id" id="id" autocomplete="username">
