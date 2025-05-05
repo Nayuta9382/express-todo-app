@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import todoRoutes from './routes/todoRoutes';
+import expressLayouts from 'express-ejs-layouts';
 import path from 'path';
 import helmet from 'helmet';
 import { connectDB } from './db'; // 明示的に呼び出す
@@ -21,9 +22,22 @@ connectDB();
 // サーバの立ち上げ
 const app = express();
 
+// EJSをビューエンジンとして設定
+app.set('view engine', 'ejs');
+// viewsディレクトリの場所を指定
+app.set('views', path.join(__dirname, 'views'));
+// `express-ejs-layouts`を使用する設定
+app.use(expressLayouts); 
+
+// レイアウトのパスを指定
+app.set('layout', 'layouts/layout'); // レイアウトファイルのパスを指定
+
+
 
 // .envから環境変数を読み込む
 const isProduction = process.env.NODE_ENV === 'production'
+
+
 
 // セッションので設定
 app.use(session({
@@ -38,14 +52,13 @@ app.use(session({
       }
 }));
 
+
+
 // 認証の設定
 app.use(passport.initialize());
 app.use(passport.session());
 
-// EJSをビューエンジンとして設定
-app.set('view engine', 'ejs');
-// viewsディレクトリの場所を指定
-app.set('views', path.join(__dirname, 'views'));
+
 // 静的ディレクトリの設定
 app.use(express.static('public'));
 // formからデータを受け取る設定

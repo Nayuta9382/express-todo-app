@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>todo-app</title>
-</head>
-<body>
+<%- contentFor('title') %>タスク一覧
+
+<%- contentFor('body') %>
     <h1>todo-app</h1>
     <% tasks.forEach(task => { %>
         <li><%= task.title %></li>
     <% }) %>
-</body>
-</html>

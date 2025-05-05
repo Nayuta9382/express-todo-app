@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title><%= typeof title !== 'undefined' ? title : 'デフォルトタイトル' %></title>
+</head>
+<body>
+  <header>
+    <h1>共通ヘッダー</h1>
+  </header>
+
+  <main>
+    <%- body %> <!-- 動的にコンテンツが挿入される部分 -->
+  </main>
+
+  <footer>
+    <p>共通フッター</p>
+  </footer>
+</body>
+</html>

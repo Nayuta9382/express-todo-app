@@ -1,25 +1,11 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>新規登録ページ</h1>
-    <!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>ユーザー登録</title>
-  <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-  <h1>ユーザー登録</h1>
+<%- contentFor('title') %>サインアップ
 
-  <form action="signup" method="post">
+<%- contentFor('body') %>
+    <h1>ユーザー登録</h1>
+
+    <form action="signup" method="post">
         <% if (idError) { %>
-          <div class="error-message"><%= idError %></div>
+        <div class="error-message"><%= idError %></div>
         <% } %>
         <label for="id">id</label>
         <input type="text" name="id" id="id">
@@ -29,7 +15,7 @@
         <br/>
         <% if (passwordError) { %>
             <div class="error-message"><%= passwordError %></div>
-          <% } %>
+        <% } %>
         <label for="password">password</label>
         <input type="password" name="password" id="password">
         <br/>
@@ -37,5 +23,3 @@
         <input type="password" id="confirmPassword" name="confirmPassword" ><br>
         <button type="submit">登録</button>
     </form>
-</body>
-</html>
