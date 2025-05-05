@@ -1,0 +1,26 @@
+# Node modules
+node_modules/
+
+# ログファイル
+*.log
+
+# 環境設定ファイル
+.env
+
+# デバッグ用ファイル
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS やエディタの設定ファイル
+.DS_Store          # macOS のシステムファイル
+.vscode/            # VSCode の設定ディレクトリ
+.idea/              # JetBrains の IDE 設定ディレクトリ
+
+# ディストリビューションのディレクトリ（ビルド結果など）
+dist/
+build/
+
+# その他の一時的なファイル
+*.swp              # vimのスワップファイル
+*.sql
