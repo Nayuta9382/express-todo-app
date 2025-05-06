@@ -5,16 +5,18 @@
   <title><%= typeof title !== 'undefined' ? title : 'デフォルトタイトル' %></title>
 </head>
 <body>
-  <header>
-    <h1>共通ヘッダー</h1>
-  </header>
+    <% if (user) { %>
+        <header>
+        <a href="/task/new">タスク追加</a>
+        </header>
+    <% } %>
 
-  <main>
+    <main>
     <%- body %> <!-- 動的にコンテンツが挿入される部分 -->
-  </main>
+    </main>
 
-  <footer>
+    <footer>
     <p>共通フッター</p>
-  </footer>
+    </footer>
 </body>
 </html>

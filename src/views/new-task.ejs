@@ -1,3 +1,16 @@
 <%- contentFor('title') %>タスク追加
 
 <%- contentFor('body') %>
+<h1>タスク追加</h1>
+<form action="" method="post">
+    <label for="title">タイトル</label>
+    <input type="text" name="title" id="title">
+    <br/>
+    <label for="detail">詳細</label>
+    <textarea name="detail" id="detail"></textarea>
+    <br/>
+    <label for="deadline">期限</label>
+    <input type="date" name="deadline" id="deadline">
+    <br/>
+    <button type="submit">登録</button>
+</form>

@@ -3,6 +3,7 @@ import passport from 'passport';
 import bcrypt from 'bcrypt';
 import { insertUser, userSelectById } from '../models/userModel';
 
+// ログインページを表示
 export const showLogin = (req: Request, res: Response) => {
         // もし flash メッセージがあればそれを渡す
         const errorMessage = req.flash('error');

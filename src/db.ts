@@ -10,6 +10,8 @@ const db: Connection = mysql.createConnection({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+    // connectionLimit: 1, 
+    waitForConnections: true
 });
 // 接続関数を明示的に呼び出す用に定義
 export const connectDB = () => {

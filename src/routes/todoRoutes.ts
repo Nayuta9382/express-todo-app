@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { showTodoList } from "../controllers/todoController";
+import { add, insert, showTodoList } from "../controllers/todoController";
 
 
 // ルーティングのインスタンスを作成
@@ -9,6 +9,8 @@ const router = Router();
 
 // todoトップの表示
 router.get('/',showTodoList);
+router.get('/new',add);
+router.post('/new',insert);
 
 
 export default router;

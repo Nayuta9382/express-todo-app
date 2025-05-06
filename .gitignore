@@ -24,3 +24,4 @@ build/
 # その他の一時的なファイル
 *.swp              # vimのスワップファイル
 *.sql
+task.txt
