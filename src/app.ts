@@ -9,6 +9,7 @@ import passport from './passport';  // passport設定
 import dotenv from 'dotenv';  // dotenvをインポート
 import authRoutes from './routes/authRoutes';  // 認証ルート
 import flash from 'connect-flash';
+import { ensureAuthenticated, errorHandler, setUserToLocals } from './middlewares/middlewares';
 
 
 const port = 3000;
@@ -69,32 +70,22 @@ app.use(helmet());
 app.use(flash());
 
 
+
+
+// ユーザ情報をviewに渡すミドルウェア
+app.use(setUserToLocals);
+
+
 // ルーティングの呼び出し 
 app.get('/', (req, res) => {
     return res.redirect('/auth/login');  // 認証失敗時トップページにリダイレクト
 });
-app.use('/task',todoRoutes);
-app.use('/auth', authRoutes); 
-
+app.use('/task', ensureAuthenticated,todoRoutes);
+app.use('/auth',authRoutes); 
 
 
 // エラーハンドリングミドルウェア
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-    if (err.status === 404) {
-    // 404 エラー処理
-    res.status(404).json({
-        message: 'The requested resource was not found',
-        error: err.message,
-    });
-    } else {
-    // その他のエラー（500 エラー処理）
-    res.status(500).json({
-        message: 'Internal Server Error',
-        error: err.message || 'Unknown error occurred',
-    });
-    }
-});
-
+app.use(errorHandler);
 
 // サーバー起動
 app.listen(3000, () => {
