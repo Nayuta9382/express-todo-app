@@ -18,6 +18,28 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
 		failureFlash: true,               // 失敗時にflashメッセージを表示
 	})(req, res, next);  // Passport の認証処理を実行
 };
+// ログアウト処理
+export const logout = (req: Request, res: Response, next: NextFunction) => {
+    req.logout((err) => {
+        if (err) {
+            return next(err); // ログアウト時のエラーを次のミドルウェアに渡す
+        }
+
+        // セッションの完全な破棄
+        req.session.destroy((err) => {
+            if (err) {
+                return next(err); // セッション破棄時のエラーを次のミドルウェアに渡す
+            }
+
+            // セッションIDを保持するクッキーも削除
+            res.clearCookie('connect.sid'); 
+
+            // セッション破棄が完了したら、ログインページにリダイレクト
+            res.redirect('/auth/login');
+        });
+    });
+};
+
 
 // 新規登録ページの表示
 export const add = (req: Request, res: Response) => {
