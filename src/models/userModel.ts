@@ -1,12 +1,15 @@
 import db from '../db'; // DB接続をインポート
-import { RowDataPacket } from 'mysql2';
+import { FieldPacket, RowDataPacket } from 'mysql2';
 
 // ユーザidの曖昧検索
-export const userSelectById = async (id:string): Promise<RowDataPacket[]> => {
+export const userSelectById = async (id:string):  Promise<RowDataPacket | null>  => {
 	try {
-		const [rows] = await db.promise().query('SELECT * FROM users WHERE id = ?', [id]);
-		return rows as RowDataPacket[];
-	} catch (err) {
+        const [rows, fields]: [RowDataPacket[], FieldPacket[]] = await db.promise().query('SELECT * FROM users WHERE id = ?', [id]);
+        if (rows.length === 0) {
+            return null;  // ユーザーが見つからない場合はnullを返す
+        }	
+        return rows[0] as RowDataPacket;
+    } catch (err) {
 		throw new Error('Error fetching user: ' + err);
 	}
 };

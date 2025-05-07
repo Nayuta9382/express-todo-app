@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addTask, getTaskAll } from '../models/taskModel';
+import { addTask, getTaskAll, selectTaskById } from '../models/taskModel';
 
 // ルーティングから呼び出されるコントローラ
 export const showTodoList = async (req:Request, res:Response) =>{
@@ -14,7 +14,7 @@ export const showTodoList = async (req:Request, res:Response) =>{
 }
 // 新規追加ページを表示
 export const add =  (req:Request, res:Response) =>{
-    res.render('new-task'); 
+    res.render('task-new'); 
 }
 // 新規登録処理
 export const insert = async (req:Request, res:Response) =>{
@@ -25,4 +25,19 @@ export const insert = async (req:Request, res:Response) =>{
     // データーべースにデータを追加
     await addTask(userId,title,detail,deadline);
     res.redirect('/task');
+}
+
+// 詳細ページを表示
+export const showDetail = async (req:Request, res:Response) =>{
+    const id = req.params.id;
+    const task = await selectTaskById(id);
+    // タスクが存在しない場合
+    if (!task) {
+        return res.status(404).render('404', {
+            message: '存在しないページです',
+        });
+    }
+
+    res.render('task-detail',{task}); 
+
 }

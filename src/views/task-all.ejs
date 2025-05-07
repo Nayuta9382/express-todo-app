@@ -2,6 +2,11 @@
 
 <%- contentFor('body') %>
     <h1>todo-app</h1>
-    <% tasks.forEach(task => { %>
-        <li><%= task.title %></li>
-    <% }) %>
+    <ul>
+        <% tasks.forEach(task => { %>
+            <ul>
+                <li><a href="/task/detail/<%= task.id %>"><%= task.title %></a></li>
+                <li><%= task.deadline %></li>
+            </ul>
+        <% }) %>
+    </ul>

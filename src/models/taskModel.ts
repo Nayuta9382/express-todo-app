@@ -1,5 +1,5 @@
 import db from '../db'; // DB接続をインポート
-import { RowDataPacket } from 'mysql2';
+import { FieldPacket, RowDataPacket } from 'mysql2';
 
 // タスクの全件取得
 export const getTaskAll = async (id:string): Promise<RowDataPacket[]> => {
@@ -10,6 +10,16 @@ export const getTaskAll = async (id:string): Promise<RowDataPacket[]> => {
 		throw new Error('Error fetching tasks: ' + err);
 	}
 };
+
+// id検索によるタスク情報取得
+export const selectTaskById = async (id:string): Promise<RowDataPacket | null> => {
+    const [rows, fields]: [RowDataPacket[], FieldPacket[]] = await db.promise().query('SELECT * FROM tasks WHERE id = ?', [id]);
+    if (rows.length === 0) {
+        return null;  // 検索結果が見つからない場合はnullを返す
+    }	
+    return rows[0] as RowDataPacket;
+}
+
 
 // タスクの新規登録
 export const addTask = async (userId:string, title:string, detail:string, deadline:Date) => {

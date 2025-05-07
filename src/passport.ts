@@ -13,7 +13,7 @@ passport.use(new LocalStrategy(
     try {
     
         // データベースからユーザー情報を取得
-        const [rows] = await userSelectById(id);
+        const rows = await userSelectById(id);
         const user = rows ? rows : null;
         
         // ユーザーが存在しない
@@ -43,7 +43,7 @@ passport.serializeUser((user: any, done) => {
 passport.deserializeUser(async (id: string, done) => {
     try {
         // データベースからユーザー情報を取得
-        const [rows] = await userSelectById(id);
+        const rows = await userSelectById(id);
         const user = rows ? rows : null;
         
 
