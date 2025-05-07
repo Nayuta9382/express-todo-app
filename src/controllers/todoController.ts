@@ -1,11 +1,19 @@
 import { Request, Response } from "express";
 import { addTask, deleteTask, getTaskAll, selectTaskById, updateTask } from '../models/taskModel';
 
-// ルーティングから呼び出されるコントローラ
+// タスク一覧ページを表示
 export const showTodoList = async (req:Request, res:Response) =>{
     try {
         const userId = (req.user as any).id; 
-        const tasks = await getTaskAll(userId);
+
+        // 検索したい文字列があるなら取得
+        let searchText = "";
+        if (req.query && req.query['search'] !== undefined && typeof req.query['search'] === 'string') {
+            searchText = req.query['search'];
+        }
+        
+
+        const tasks = await getTaskAll(userId,searchText);
         res.render('task-all', { tasks }); 
 	} catch (error) {
         console.error(error);

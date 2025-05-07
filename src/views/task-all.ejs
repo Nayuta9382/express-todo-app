@@ -2,6 +2,11 @@
 
 <%- contentFor('body') %>
     <h1>todo-app</h1>
+    <form action="/task" method="get">
+        <label for="search">検索</label>
+        <input type="text" name="search" id="search" placeholder="タイトルを検索">
+        <button type="submit">検索</button>
+    </form>
     <ul>
         <% tasks.forEach(task => { %>
             <ul>
