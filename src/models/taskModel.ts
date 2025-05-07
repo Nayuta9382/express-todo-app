@@ -1,10 +1,10 @@
 import db from '../db'; // DB接続をインポート
 import { FieldPacket, RowDataPacket } from 'mysql2';
 
-// タスクの全件取得
+// タスクの全件取得(削除されていない)
 export const getTaskAll = async (id:string): Promise<RowDataPacket[]> => {
   try {
-		const [rows] = await db.promise().query('SELECT id,user_id,title,detail, DATE_FORMAT(deadline, "%Y-%m-%d") AS deadline FROM tasks WHERE user_id = ?',[id]);
+		const [rows] = await db.promise().query('SELECT id,user_id,title,detail, DATE_FORMAT(deadline, "%Y-%m-%d") AS deadline FROM tasks WHERE user_id = ? AND del_flg = 0',[id]);
 		return rows as RowDataPacket[];
 	} catch (err) {
 		throw new Error('Error fetching tasks: ' + err);
@@ -40,4 +40,15 @@ export const updateTask = async (id:string, title:string, detail:string, deadlin
         throw new Error('task insert error: ' + err);
     }
 }
+
+// タスクの削除処理
+export const deleteTask = async (id:string) => {
+    try {
+        await db.promise().query('UPDATE tasks SET del_flg = 1 WHERE id = ?',[id]);
+
+    } catch (err) {
+        throw new Error('task insert error: ' + err);
+    }
+}
+
 

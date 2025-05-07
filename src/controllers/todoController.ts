@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addTask, getTaskAll, selectTaskById, updateTask } from '../models/taskModel';
+import { addTask, deleteTask, getTaskAll, selectTaskById, updateTask } from '../models/taskModel';
 
 // ルーティングから呼び出されるコントローラ
 export const showTodoList = async (req:Request, res:Response) =>{
@@ -71,5 +71,23 @@ export const update = async (req:Request, res:Response) =>{
     updateTask(id,title,detail,deadline);
     // 詳細ページにリダイレクト
     res.redirect(`/task/detail/${id}`);
+
+}
+
+// 削除処理
+export const del = async (req:Request, res:Response) =>{
+    const id = req.params.id;
+    const task = await selectTaskById(id);
+    // タスクが存在しない場合
+    if (!task) {
+        return res.status(404).render('404', {
+            message: '削除対象のデータが見つかりませんでした',
+        });
+    }
+    // 削除処理
+    deleteTask(id);
+    // タスク一覧ページにリダイレクト
+    res.redirect(`/task`);
+
 
 }

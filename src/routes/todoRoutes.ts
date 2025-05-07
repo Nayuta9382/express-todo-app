@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { add, edit, insert, showDetail, showTodoList, update } from "../controllers/todoController";
+import { add, del, edit, insert, showDetail, showTodoList, update } from "../controllers/todoController";
 
 
 // ルーティングのインスタンスを作成
@@ -19,5 +19,8 @@ router.get('/detail/:id', showDetail);
 router.get('/edit/:id', edit);
 // 更新ページ削除
 router.post('/edit/:id', update);
+// 削除処理
+router.get('/delete/:id', del);
+
 
 export default router;
