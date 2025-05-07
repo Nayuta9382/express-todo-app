@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addTask, getTaskAll, selectTaskById } from '../models/taskModel';
+import { addTask, getTaskAll, selectTaskById, updateTask } from '../models/taskModel';
 
 // ルーティングから呼び出されるコントローラ
 export const showTodoList = async (req:Request, res:Response) =>{
@@ -37,7 +37,39 @@ export const showDetail = async (req:Request, res:Response) =>{
             message: '存在しないページです',
         });
     }
-
     res.render('task-detail',{task}); 
+
+}
+
+// 更新ページ表示
+export const edit = async (req:Request, res:Response) =>{
+    const id = req.params.id;
+    const task = await selectTaskById(id);
+    // タスクが存在しない場合
+    if (!task) {
+        return res.status(404).render('404', {
+            message: '存在しないページです',
+        });
+    }
+
+    res.render('task-edit',{task}); 
+}
+
+// 更新処理
+export const update = async (req:Request, res:Response) =>{
+    const { title, detail, deadline } = req.body; 
+    const id = req.params.id;
+    const task = await selectTaskById(id);
+    // タスクが存在しない場合
+    if (!task) {
+        return res.status(404).render('404', {
+            message: '更新対象のデータが見つかりませんでした',
+        });
+    }
+
+    // 更新処理
+    updateTask(id,title,detail,deadline);
+    // 詳細ページにリダイレクト
+    res.redirect(`/task/detail/${id}`);
 
 }
