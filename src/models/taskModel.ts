@@ -2,9 +2,10 @@ import db from '../db'; // DB接続をインポート
 import { FieldPacket, RowDataPacket } from 'mysql2';
 
 // タスクの全件取得(削除されていない)
-export const getTaskAll = async (id:string,searchText:string): Promise<RowDataPacket[]> => {
+export const getTaskAll = async (id:string,searchText:string,sort:string): Promise<RowDataPacket[]> => {
   try {
-		const [rows] = await db.promise().query('SELECT id,user_id,title,detail, DATE_FORMAT(deadline, "%Y-%m-%d") AS deadline FROM tasks WHERE user_id = ? AND del_flg = 0 AND title LIKE ?',[id,`%${searchText}%`]);
+        const orderBy = sort === 'asc' ? 'ORDER BY deadline ASC' : 'ORDER BY deadline DESC'
+		const [rows] = await db.promise().query(`SELECT id,user_id,title,detail, DATE_FORMAT(deadline, "%Y-%m-%d") AS deadline FROM tasks WHERE user_id = ? AND del_flg = 0 AND title LIKE ? ${orderBy}`,[id,`%${searchText}%`]);
 		return rows as RowDataPacket[];
 	} catch (err) {
 		throw new Error('Error fetching tasks: ' + err);

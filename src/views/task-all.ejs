@@ -4,14 +4,27 @@
     <h1>todo-app</h1>
     <form action="/task" method="get">
         <label for="search">検索</label>
-        <input type="text" name="search" id="search" placeholder="タイトルを検索">
+        <input type="text" name="search" id="search" placeholder="タイトルを検索" value="<%= searchText %>">
+        <input type="hidden" name="sort" value="<%= sort === 'asc' ? 'asc' : 'desc' %>">
         <button type="submit">検索</button>
     </form>
     <ul>
+        <ul class="flex">
+            <li>タイトル</li>
+            <li>期限<a href="/task?sort=<%= sort === 'asc' ? 'desc' : 'asc' %><%= searchText !== '' ? `&search=${searchText}` : '' %>"><img src="/img/arrow-circle-<%= sort === 'asc' ? 'up' : 'down' %>.svg" alt="ソートアイコン"></a></li>
+        </ul>
         <% tasks.forEach(task => { %>
-            <ul>
+            <ul class="flex">
                 <li><a href="/task/detail/<%= task.id %>"><%= task.title %></a></li>
                 <li><%= task.deadline %></li>
             </ul>
         <% }) %>
     </ul>
+<style>
+    .flex{
+        display: flex;
+    }
+    li{
+        list-style:none;
+    }
+</style>

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { addTask, deleteTask, getTaskAll, selectTaskById, updateTask } from '../models/taskModel';
+import { serialize } from "v8";
 
 // タスク一覧ページを表示
 export const showTodoList = async (req:Request, res:Response) =>{
@@ -7,14 +8,20 @@ export const showTodoList = async (req:Request, res:Response) =>{
         const userId = (req.user as any).id; 
 
         // 検索したい文字列があるなら取得
-        let searchText = "";
+        let searchText = '';
         if (req.query && req.query['search'] !== undefined && typeof req.query['search'] === 'string') {
             searchText = req.query['search'];
         }
-        
 
-        const tasks = await getTaskAll(userId,searchText);
-        res.render('task-all', { tasks }); 
+        // 期限の昇順・降順を取得(デフォルトは昇順)
+        let sort = 'asc';
+        if (req.query && req.query['sort'] !== undefined && typeof req.query['sort'] === 'string' && req.query['sort'] === 'desc') {
+            sort = 'desc';
+        }
+
+
+        const tasks = await getTaskAll(userId,searchText,sort);
+        res.render('task-all', { tasks, searchText, sort }); 
 	} catch (error) {
         console.error(error);
 		res.status(500).send('タスクの取得中にエラーが発生しました');
