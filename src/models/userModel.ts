@@ -22,3 +22,12 @@ export const insertUser = async (id:number,name:string,password:string) => {
 		throw new Error('Error fetching user: ' + err);
 	}
 };
+
+// ユーザ情報更新
+export const updateUser = async (id:number,name:string,imgPath:string) => {
+	try {
+        await db.promise().query('UPDATE users SET name = ?, img_path = COALESCE(?, img_path) WHERE id = ?',[name, imgPath, id]);
+    } catch (err) {
+		throw new Error('Error fetching user: ' + err);
+	}
+};

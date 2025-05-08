@@ -83,7 +83,7 @@ export const update = async (req:Request, res:Response) =>{
     }
 
     // 更新処理
-    updateTask(id,title,detail,deadline);
+    await updateTask(id,title,detail,deadline);
     // 詳細ページにリダイレクト
     res.redirect(`/task/detail/${id}`);
 
@@ -100,7 +100,7 @@ export const del = async (req:Request, res:Response) =>{
         });
     }
     // 削除処理
-    deleteTask(id);
+    await deleteTask(id);
     // タスク一覧ページにリダイレクト
     res.redirect(`/task`);
 

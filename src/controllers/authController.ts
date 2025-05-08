@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import bcrypt from 'bcrypt';
-import { insertUser, userSelectById } from '../models/userModel';
+import { insertUser, updateUser, userSelectById } from '../models/userModel';
 import { RowDataPacket } from 'mysql2';
+import { deleteFileIfExists, upload } from '../utils/upload';
 
 // ログインページを表示
 export const showLogin = (req: Request, res: Response) => {
@@ -81,4 +82,55 @@ export const insert =  async (req: Request, res: Response, next: NextFunction) =
 	console.error('ユーザー登録エラー:', err);
 	next(err);  // 500エラーとしてエラーハンドリングミドルウェアに渡す
 	}
+}
+
+// ユーザー情報変更ページ表示
+export const edit =  async (req: Request, res: Response, next: NextFunction) =>{
+    const userId = (req.user as any).id; 
+    // ユーザー情報取得
+    const user =  await userSelectById(userId);
+    const uploadError = req.flash('uploadError');
+    res.render('user-edit',{
+        uploadError: uploadError.length > 0 ? uploadError[0] : null,
+        user
+    });
+
+}
+// ユーザー情報変更処理
+export const update =  async (req: Request, res: Response, next: NextFunction) =>{
+    // ファイルのアップロード処理
+    upload.single('profile-img')(req, res, async (err: any) => {
+          // エラーハンドリング(ファイルが送信されていない場合はアップロード処理自体は行わない)
+          if (err) {
+            // サイズ超過エラー
+            if (err.code === 'LIMIT_FILE_SIZE') {
+                req.flash('uploadError', 'ファイルサイズが大きすぎます。最大サイズは2MBです。');
+            } else {
+                // その他のエラー
+                req.flash('uploadError', 'アップロードエラー: ' + err.message);
+            }
+            return res.redirect('/auth/edit'); // エラー発生時にリダイレクト
+        }
+        
+        // ファイルが送信されている場合保存されているファイル名を取得
+        const userId = (req.user as any).id; 
+        const user =  await userSelectById(userId);
+        let filePath = user && user.img_path;
+
+        if (req.file) {
+            // 既に保存されているデフォルト画像以外の画像を削除
+            if (user?.img_path && user.img_path.startsWith('/uploads/') && user.img_path !== '/uploads/default-img.png') {
+                deleteFileIfExists(user.img_path);
+            }
+            
+            filePath = `/uploads/${req.file.filename}`;
+        }
+
+        // データベースへの保存処理
+        const { name } = req.body; // POSTデータを取得
+
+        await updateUser(userId,name,filePath);
+        return res.redirect('/task');
+
+    });
 }

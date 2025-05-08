@@ -25,3 +25,9 @@ build/
 *.swp              # vimのスワップファイル
 *.sql
 task.txt
+
+# public/uploads以下のすべてを無視
+/public/uploads/*
+
+# ただし、default-img.svg は除外（=Gitに含める）
+!/public/uploads/default-img.png
