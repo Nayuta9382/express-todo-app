@@ -4,22 +4,48 @@
     <h1>ユーザー登録</h1>
 
     <form action="signup" method="post">
-        <% if (idError) { %>
-        <div class="error-message"><%= idError %></div>
+
+        <label for="id">ID</label>
+        <% if (customError.idError) { %>
+        <p class="error"><%= customError.idError %></p>
         <% } %>
-        <label for="id">id</label>
-        <input type="text" name="id" id="id">
-        <br/>
-        <label for="name">name</label>
-        <input type="text" name="name" id="name">
-        <br/>
-        <% if (passwordError) { %>
-            <div class="error-message"><%= passwordError %></div>
+        <% if (errors.id) { %>
+            <% errors.id.forEach(function(msg) { %>
+                <p class="error"><%= msg %></p>
+            <% }); %>
         <% } %>
-        <label for="password">password</label>
+        <input type="text" name="id" id="id" value="<%= oldInput.id || '' %>">
+        <br/>
+
+        <label for="name">名前</label>
+        <% if (errors.name) { %>
+            <% errors.name.forEach(function(msg) { %>
+                <p class="error"><%= msg %></p>
+            <% }); %>
+        <% } %>
+        <input type="text" name="name" id="name" value="<%= oldInput.name || '' %>">
+        <br/>
+
+        <label for="password">パスワード</label>
+        <% if (customError.passwordError) { %>
+            <p class="error"><%= customError.passwordError %></p>
+        <% } %>
+        <% if (errors.password) { %>
+            <% errors.password.forEach(function(msg) { %>
+                <p class="error"><%= msg %></p>
+            <% }); %>
+        <% } %>
         <input type="password" name="password" id="password">
         <br/>
+
         <label for="confirmPassword">パスワード確認:</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" ><br>
+        <% if (errors.confirmPassword) { %>
+            <% errors.confirmPassword.forEach(function(msg) { %>
+                <p class="error"><%= msg %></p>
+            <% }); %>
+        <% } %>
+        <input type="password" id="confirmPassword" name="confirmPassword" >
+        <br>
+
         <button type="submit">登録</button>
     </form>

@@ -4,6 +4,8 @@ import bcrypt from 'bcrypt';
 import { insertUser, updateUser, userSelectById } from '../models/userModel';
 import { RowDataPacket } from 'mysql2';
 import { deleteFileIfExists, upload } from '../utils/upload';
+import { renderWithSessionClear } from '../utils/renderWithSessionClear';
+import { handleValidationErrors } from '../utils/handleValidationErrors';
 
 // ログインページを表示
 export const showLogin = (req: Request, res: Response,next: NextFunction) => {
@@ -64,13 +66,18 @@ export const add = (req: Request, res: Response) => {
 	// もし flash メッセージがあればそれを渡す
 	const idErrorMessage = req.flash('idError');
 	const passwordErrorMessage = req.flash('passwordError');
-	res.render('signup', { 
+    
+    renderWithSessionClear(req,res,'signup',{ 
 		idError: idErrorMessage.length > 0 ? idErrorMessage[0] : null,
 		passwordError: passwordErrorMessage.length > 0 ? passwordErrorMessage[0] : null
 	});
+
 }
 // データベースにユーザ情報を登録
 export const insert =  async (req: Request, res: Response, next: NextFunction) =>{
+    if (handleValidationErrors(req, res, '/auth/signup')) return;    
+    
+
 	try {
 		const { id, name, password,confirmPassword } = req.body; // POSTデータを取得
 
