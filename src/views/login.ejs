@@ -3,7 +3,7 @@
 <%- contentFor('body') %>
 <h1>ログインページ</h1>
 <% if (typeof error !== 'undefined' && error) { %>
-  <div class="error-message"><%= error %></div>
+  <p class="error"><%= error %></p>
 <% } %>
 <form action="/auth/login" method="post">
   <label for="id">id</label>

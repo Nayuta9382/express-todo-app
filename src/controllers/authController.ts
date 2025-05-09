@@ -33,7 +33,7 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
 	passport.authenticate('local', {
 		successRedirect: '/task',         // ログイン成功時にリダイレクト
 		failureRedirect: '/auth/login-error',   // ログイン失敗時にリダイレクト
-		failureFlash: true,               // 失敗時にflashメッセージを表示
+		failureFlash: 'idとパスワードが一致しません',               // 失敗時にflashメッセージを表示
 	})(req, res, next);  // Passport の認証処理を実行
 };
 // ログアウト処理
