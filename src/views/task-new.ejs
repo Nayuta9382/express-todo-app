@@ -2,15 +2,27 @@
 
 <%- contentFor('body') %>
 <h1>タスク追加</h1>
-<form action="/task/new" method="post">
+<form action="/task/new" method="post" id="form">
     <label for="title">タイトル</label>
-    <input type="text" name="title" id="title">
+    <% if (errors.title) { %>
+        <div class="error"><%= errors.title %></div>
+    <% } %>
+    <input type="text" name="title" id="title" value="<%= oldInput.title || '' %>">
     <br/>
     <label for="detail">詳細</label>
-    <textarea name="detail" id="detail"></textarea>
+     <% if (errors.detail) { %>
+        <div class="error"><%= errors.detail %></div>
+    <% } %>
+    <textarea name="detail" id="detail"><%= oldInput.detail || '' %></textarea>
     <br/>
     <label for="deadline">期限</label>
-    <input type="date" name="deadline" id="deadline">
+     <% if (errors.deadline) { %>
+        <div class="error"><%= errors.deadline %></div>
+    <% } %>
+    <input type="date" name="deadline" id="deadline" value="<%= oldInput.deadline || '' %>">
     <br/>
     <button type="submit">登録</button>
 </form>
+ <% if (errors && errors.length > 0) { %>
+    <%=errors[0]%>
+<% } %>

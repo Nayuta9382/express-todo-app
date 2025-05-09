@@ -6,16 +6,33 @@ import { RowDataPacket } from 'mysql2';
 import { deleteFileIfExists, upload } from '../utils/upload';
 
 // ログインページを表示
-export const showLogin = (req: Request, res: Response) => {
+export const showLogin = (req: Request, res: Response,next: NextFunction) => {
+    req.session.destroy((err) => {
+        if (err) return next(err);
+
+        // クッキーに保存されているセッションIDも削除
+        res.clearCookie('connect.sid');
+
         // もし flash メッセージがあればそれを渡す
-        const errorMessage = req.flash('error');
-        res.render('login', { error: errorMessage.length > 0 ? errorMessage[0] : null });
-	}
+        res.render('login', { error:  null });
+    });
+}
+
+// ログイン処理でエラーがある場合エラーを保持してログインページを表氏
+export const showLoginWithError = (req: Request, res: Response,next: NextFunction) => {
+    const errorMessage = req.flash('error');
+    if(errorMessage.length > 0){
+        res.render('login', { error: errorMessage[0] });
+    }else{
+        res.redirect('/auth/login');
+    }
+    // もし flash メッセージがあればそれを渡す
+}
 // ログイン処理を行う
 export const login = (req: Request, res: Response, next: NextFunction) => {
 	passport.authenticate('local', {
 		successRedirect: '/task',         // ログイン成功時にリダイレクト
-		failureRedirect: '/auth/login',   // ログイン失敗時にリダイレクト
+		failureRedirect: '/auth/login-error',   // ログイン失敗時にリダイレクト
 		failureFlash: true,               // 失敗時にflashメッセージを表示
 	})(req, res, next);  // Passport の認証処理を実行
 };

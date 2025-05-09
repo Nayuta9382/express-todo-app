@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { add, del, edit, insert, showDetail, showTodoList, update } from "../controllers/todoController";
+import { validateTask } from "../validators/taskValidator";
 
 
 // ルーティングのインスタンスを作成
@@ -12,7 +13,7 @@ router.get('/',showTodoList);
 // 新規追加ページ表示
 router.get('/new',add);
 // 新規登録処理
-router.post('/new',insert);
+router.post('/new',validateTask,insert);
 // 詳細ページ表示
 router.get('/detail/:id', showDetail);
 // 更新ページ表示

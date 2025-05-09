@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
+import http from 'http';
 import todoRoutes from './routes/todoRoutes';
 import expressLayouts from 'express-ejs-layouts';
 import path from 'path';
@@ -86,6 +87,12 @@ app.use('/auth',authRoutes);
 
 // エラーハンドリングミドルウェア
 app.use(errorHandler);
+
+
+const server = http.createServer(app);
+
+// ⏱ 10秒（10000ミリ秒）でタイムアウト
+server.setTimeout(10000); 
 
 // サーバー起動
 app.listen(3000, () => {

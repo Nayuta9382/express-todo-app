@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { addTask, deleteTask, getTaskAll, selectTaskById, updateTask } from '../models/taskModel';
 import { serialize } from "v8";
+import { ValidationError, validationResult } from "express-validator";
+import { handleValidationErrors } from "../utils/handleValidationErrors";
+import { renderWithSessionClear } from "../utils/renderWithSessionClear";
 
 // タスク一覧ページを表示
 export const showTodoList = async (req:Request, res:Response) =>{
@@ -29,10 +32,13 @@ export const showTodoList = async (req:Request, res:Response) =>{
 }
 // 新規追加ページを表示
 export const add =  (req:Request, res:Response) =>{
-    res.render('task-new'); 
+    renderWithSessionClear(req,res,'task-new');
 }
 // 新規登録処理
 export const insert = async (req:Request, res:Response) =>{
+    // バリデーションエラーがあるのなら
+    if (handleValidationErrors(req, res, '/task/new')) return;    
+    
     // POSTデータを取得
     const { title, detail, deadline } = req.body; 
     // userIdを取得
