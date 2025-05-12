@@ -1,7 +1,7 @@
 import { body } from 'express-validator';
 
 // タスクの追加・編集のバリデーション
-export const validateUser = [
+export const validateSignup = [
     body('id')
         .notEmpty().withMessage('IDは必須です')
         .isLength({ max: 50 }).withMessage('IDは50文字以内にしてください'),

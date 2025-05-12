@@ -1,7 +1,9 @@
 import { Router } from "express";
 import { add, edit, insert, login, logout, showLogin, showLoginWithError, update } from "../controllers/authController";
 import { ensureAuthenticated } from "../middlewares/middlewares";
-import { validateUser } from "../validators/userValidator";
+import { validateSignup } from "../validators/signupValidator";
+import { validateUpdateUser } from "../validators/updateUserValidator";
+import { upload } from "../utils/upload";
 const router = Router();
 
 // ログイン処理
@@ -16,10 +18,10 @@ router.get('/logout',logout);
 
 // 新規登録処理
 router.get('/signup', add);
-router.post('/signup',validateUser, insert);
+router.post('/signup',validateSignup, insert);
 
 // アカウント情報変更
 router.get('/edit', ensureAuthenticated,edit);
-router.post('/edit',ensureAuthenticated, update);
+router.post('/edit', update);
 
 export default router;

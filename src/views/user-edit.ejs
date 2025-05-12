@@ -4,13 +4,18 @@
 <h1>ユーザー情報変更</h1>
 <form action="/auth/edit" method="post" enctype="multipart/form-data">
     <label for="name">ユーザー名</label>
-    <input type="text" name="name" id="name" value="<%= user.name %>">
+     <% if (errors.name) { %>
+        <% errors.name.forEach(function(msg) { %>
+            <p class="error"><%= msg %></p>
+        <% }); %>
+    <% } %>
+    <input type="text" name="name" id="name" value="<%= typeof oldInput.name !== 'undefined' ? oldInput.name : user.name %>">
     <br/>
     <label for="profile-img">プロフィール画像</label>
     <img src="<%= user.img_path %>" alt="プロフィール画像" srcset="">
     <input type="file" name="profile-img" id="profile-img">
-    <% if (uploadError) { %>
-        <%= uploadError %>
+    <% if ( customError.uploadError) { %>
+        <%=  customError.uploadError %>
     <% } %>
     <button type="submit">登録</button>
 </form>

@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { ValidationError, validationResult } from 'express-validator';
 
-// バリデーションエラーがあればリダイレクトする関数
-export const handleValidationErrors = (req: Request,res: Response,redirectPath: string): boolean => {
+// バリデーションエラーがあればリダイレクトする関数(bodyのセッションを保存するかのフラグ)
+export const handleValidationErrors = (req: Request,res: Response,redirectPath: string,sessionRetFlg = false): boolean => {
+    
     const errors = validationResult(req);
   
     if (!errors.isEmpty()) {
@@ -27,7 +28,11 @@ export const handleValidationErrors = (req: Request,res: Response,redirectPath: 
         res.redirect(redirectPath);
         return true;
     }
+    // セッションに入力内容を保存する
+    if(sessionRetFlg){
+        req.session.oldInput = req.body;
 
+    }
 
     return false; // エラーなし
 };

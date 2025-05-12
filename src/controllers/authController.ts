@@ -6,6 +6,8 @@ import { RowDataPacket } from 'mysql2';
 import { deleteFileIfExists, upload } from '../utils/upload';
 import { renderWithSessionClear } from '../utils/renderWithSessionClear';
 import { handleValidationErrors } from '../utils/handleValidationErrors';
+import { validateUpdateUser } from '../validators/updateUserValidator';
+import { ValidationError, validationResult } from 'express-validator';
 
 // ログインページを表示
 export const showLogin = (req: Request, res: Response,next: NextFunction) => {
@@ -114,31 +116,48 @@ export const edit =  async (req: Request, res: Response, next: NextFunction) =>{
     // ユーザー情報取得
     const user =  await userSelectById(userId);
     const uploadError = req.flash('uploadError');
-    res.render('user-edit',{
-        uploadError: uploadError.length > 0 ? uploadError[0] : null,
-        user
-    });
+    
+     renderWithSessionClear(req,res,'user-edit',{ 
+		uploadError: uploadError.length > 0 ? uploadError[0] : null,
+		user
+	});
 
 }
+
 // ユーザー情報変更処理
-export const update =  async (req: Request, res: Response, next: NextFunction) =>{
+export const update = (req: Request, res: Response, next: NextFunction) => {
     // ファイルのアップロード処理
     upload.single('profile-img')(req, res, async (err: any) => {
-          // エラーハンドリング(ファイルが送信されていない場合はアップロード処理自体は行わない)
-          if (err) {
+        // バリデーションの実行
+        await Promise.all(validateUpdateUser.map(validation => validation.run(req)));
+    
+        // バリデーションエラーがあればリダイレクトする
+        if (handleValidationErrors(req, res, '/auth/edit',true)) return;  // バリデーションエラーがあればリダイレクト
+        // エラーハンドリング(ファイルが送信されていない場合はアップロード処理自体は行わない)
+        if (err) {
             // サイズ超過エラー
             if (err.code === 'LIMIT_FILE_SIZE') {
                 req.flash('uploadError', 'ファイルサイズが大きすぎます。最大サイズは2MBです。');
-            } else {
-                // その他のエラー
-                req.flash('uploadError', 'アップロードエラー: ' + err.message);
+            } 
+            // ファイルタイプが不正な場合
+            else if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+                req.flash('uploadError', '無効なファイルタイプです。JPEG, PNG, GIF のいずれかの画像ファイルをアップロードしてください。');
+            }
+            // その他のエラー
+            else {
+                req.flash('uploadError', 'ファイルのアップロード中にエラーが発生しました。再度お試しください。');
             }
             return res.redirect('/auth/edit'); // エラー発生時にリダイレクト
         }
-        
+
+        // セッションの削除
+        delete req.session.oldInput;
+
+
+
         // ファイルが送信されている場合保存されているファイル名を取得
-        const userId = (req.user as any).id; 
-        const user =  await userSelectById(userId);
+        const userId = (req.user as any).id;
+        const user = await userSelectById(userId);
         let filePath = user && user.img_path;
 
         if (req.file) {
@@ -153,8 +172,11 @@ export const update =  async (req: Request, res: Response, next: NextFunction) =
         // データベースへの保存処理
         const { name } = req.body; // POSTデータを取得
 
-        await updateUser(userId,name,filePath);
-        return res.redirect('/task');
-
+        try {
+            await updateUser(userId, name, filePath);
+            return res.redirect('/task');
+        } catch (err) {
+            next(err); // エラーがあれば次のミドルウェアへ
+        }
     });
-}
+};
