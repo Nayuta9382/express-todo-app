@@ -22,6 +22,6 @@ router.post('/signup',validateSignup, insert);
 
 // アカウント情報変更
 router.get('/edit', ensureAuthenticated,edit);
-router.post('/edit', update);
+router.post('/edit',ensureAuthenticated, update);
 
 export default router;

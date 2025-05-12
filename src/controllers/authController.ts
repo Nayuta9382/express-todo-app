@@ -112,14 +112,11 @@ export const insert =  async (req: Request, res: Response, next: NextFunction) =
 
 // ユーザー情報変更ページ表示
 export const edit =  async (req: Request, res: Response, next: NextFunction) =>{
-    const userId = (req.user as any).id; 
-    // ユーザー情報取得
-    const user =  await userSelectById(userId);
     const uploadError = req.flash('uploadError');
     
+    // setUserToLocalsでuser情報を渡されるためuser情報は渡さない
      renderWithSessionClear(req,res,'user-edit',{ 
 		uploadError: uploadError.length > 0 ? uploadError[0] : null,
-		user
 	});
 
 }
