@@ -60,6 +60,7 @@ export const showDetail = async (req:Request, res:Response) =>{
     }
     res.render('task-detail',{task}); 
 
+
 }
 
 // 更新ページ表示
@@ -72,14 +73,16 @@ export const edit = async (req:Request, res:Response) =>{
             message: '存在しないページです',
         });
     }
-
-    res.render('task-edit',{task}); 
+    renderWithSessionClear(req,res,`task-edit`,{task});
 }
 
 // 更新処理
 export const update = async (req:Request, res:Response) =>{
-    const { title, detail, deadline } = req.body; 
     const id = req.params.id;
+    // バリデーションエラーがあるのなら
+    if (handleValidationErrors(req, res, `/task/edit/${id}`)) return;    
+
+    const { title, detail, deadline } = req.body; 
     const task = await selectTaskById(id);
     // タスクが存在しない場合
     if (!task) {

@@ -19,7 +19,7 @@ router.get('/detail/:id', showDetail);
 // 更新ページ表示
 router.get('/edit/:id', edit);
 // 更新ページ削除
-router.post('/edit/:id', update);
+router.post('/edit/:id',validateTask, update);
 // 削除処理
 router.get('/delete/:id', del);
 
