@@ -14,8 +14,8 @@
     <label for="profile-img">プロフィール画像</label>
     <img src="<%= user.img_path %>" alt="プロフィール画像" srcset="">
     <input type="file" name="profile-img" id="profile-img">
-    <% if ( customError.uploadError) { %>
-        <%=  customError.uploadError %>
+    <% if ( customItem.uploadError) { %>
+        <%=  customItem.uploadError %>
     <% } %>
     <button type="submit">登録</button>
 </form>

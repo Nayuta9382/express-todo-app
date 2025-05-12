@@ -6,8 +6,8 @@
     <form action="signup" method="post">
 
         <label for="id">ID</label>
-        <% if (customError.idError) { %>
-        <p class="error"><%= customError.idError %></p>
+        <% if (customItem.idError) { %>
+        <p class="error"><%= customItem.idError %></p>
         <% } %>
         <% if (errors.id) { %>
             <% errors.id.forEach(function(msg) { %>
@@ -27,8 +27,8 @@
         <br/>
 
         <label for="password">パスワード</label>
-        <% if (customError.passwordError) { %>
-            <p class="error"><%= customError.passwordError %></p>
+        <% if (customItem.passwordError) { %>
+            <p class="error"><%= customItem.passwordError %></p>
         <% } %>
         <% if (errors.password) { %>
             <% errors.password.forEach(function(msg) { %>
