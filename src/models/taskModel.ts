@@ -13,7 +13,7 @@ export const getTaskAll = async (id:string,searchText:string,sort:string): Promi
 };
 
 // id検索によるタスク情報取得
-export const selectTaskById = async (id:string): Promise<RowDataPacket | null> => {
+export const selectTaskById = async (id:number): Promise<RowDataPacket | null> => {
     const [rows, fields]: [RowDataPacket[], FieldPacket[]] = await db.promise().query('SELECT id,user_id,title,detail, DATE_FORMAT(deadline, "%Y-%m-%d") AS deadline FROM tasks WHERE id = ?', [id]);
     if (rows.length === 0) {
         return null;  // 検索結果が見つからない場合はnullを返す
@@ -33,7 +33,7 @@ export const addTask = async (userId:string, title:string, detail:string, deadli
 }
 
 // タスクの更新処理
-export const updateTask = async (id:string, title:string, detail:string, deadline:Date) => {
+export const updateTask = async (id:number, title:string, detail:string, deadline:Date) => {
     try {
         await db.promise().query('UPDATE tasks SET title = ? , detail = ? , deadline = ? WHERE id = ?',[title,detail,deadline,id]);
 
@@ -43,7 +43,7 @@ export const updateTask = async (id:string, title:string, detail:string, deadlin
 }
 
 // タスクの削除処理
-export const deleteTask = async (id:string) => {
+export const deleteTask = async (id:number) => {
     try {
         await db.promise().query('UPDATE tasks SET del_flg = 1 WHERE id = ?',[id]);
 

@@ -50,7 +50,7 @@ export const insert = async (req:Request, res:Response) =>{
 
 // 詳細ページを表示
 export const showDetail = async (req:Request, res:Response) =>{
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
     const task = await selectTaskById(id);
     // タスクが存在しない場合
     if (!task) {
@@ -65,7 +65,7 @@ export const showDetail = async (req:Request, res:Response) =>{
 
 // 更新ページ表示
 export const edit = async (req:Request, res:Response) =>{
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
     const task = await selectTaskById(id);
     // タスクが存在しない場合
     if (!task) {
@@ -78,7 +78,7 @@ export const edit = async (req:Request, res:Response) =>{
 
 // 更新処理
 export const update = async (req:Request, res:Response) =>{
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
     // バリデーションエラーがあるのなら
     if (handleValidationErrors(req, res, `/task/edit/${id}`)) return;    
 
@@ -100,7 +100,7 @@ export const update = async (req:Request, res:Response) =>{
 
 // 削除処理
 export const del = async (req:Request, res:Response) =>{
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
     const task = await selectTaskById(id);
     // タスクが存在しない場合
     if (!task) {
