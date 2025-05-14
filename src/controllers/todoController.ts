@@ -21,10 +21,14 @@ export const showTodoList = async (req:Request, res:Response) =>{
         if (req.query && req.query['sort'] !== undefined && typeof req.query['sort'] === 'string' && req.query['sort'] === 'desc') {
             sort = 'desc';
         }
+        let delFlg = 0;
+        if (req.query && req.query['task-status'] !== undefined && typeof req.query['task-status'] === 'string' && req.query['task-status'] === '1') {
+            delFlg = 1;
+        }
 
 
-        const tasks = await getTaskAll(userId,searchText,sort);
-        res.render('task-all', { tasks, searchText, sort }); 
+        const tasks = await getTaskAll(userId,searchText,sort,delFlg);
+        res.render('task-all', { tasks, searchText, sort, delFlg }); 
 	} catch (error) {
         console.error(error);
 		res.status(500).send('タスクの取得中にエラーが発生しました');

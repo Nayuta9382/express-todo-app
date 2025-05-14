@@ -50,16 +50,14 @@ app.set('trust proxy', 1);  // 1つのプロキシサーバーを信頼する
 // セッションので設定
 app.use(session({
     secret: process.env.SESSION_SECRET || 'default-secret',  // .envからシークレットを読み込む
-    // resave: true,
     resave: false,
-    // saveUninitialized: true,
     saveUninitialized: false,
     cookie: {
         maxAge: 1000 * 60 * 60 * 2, // セッションの有効期限（例：2時間）
         secure: isProduction,       // 本番環境では secure: true に設定（HTTPSを強制）
         httpOnly: true,             // クライアントサイドのJavaScriptからアクセスできないように
         // sameSite: 'strict'          // クロスサイトリクエストでのCookie送信を制限
-            sameSite: 'lax' // 'strict'から'lax'に変更することでリダイレクト時のCookie送信を許可
+        sameSite: 'lax' // 'strict'から'lax'に変更することでリダイレクト時のCookie送信を許可
       }
 }));
 
