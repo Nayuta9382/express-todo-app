@@ -1,9 +1,11 @@
-import { Router } from "express";
-import { add, edit, insert, login, logout, showLogin, showLoginWithError, update } from "../controllers/authController";
-import { ensureAuthenticated } from "../middlewares/middlewares";
+import { NextFunction, Request, Response, Router } from "express";
+import { add, edit, gitHubCallback, insert, login, logout,  showLogin, showLoginWithError, update } from "../controllers/authController";
+import { ensureAuthenticated, githubAuthMiddleware } from "../middlewares/middlewares";
 import { validateSignup } from "../validators/signupValidator";
 import { validateUpdateUser } from "../validators/updateUserValidator";
 import { upload } from "../utils/upload";
+import passport from "passport";
+import { userSelectById } from "../models/userModel";
 const router = Router();
 
 // ログイン処理
@@ -24,4 +26,21 @@ router.post('/signup',validateSignup, insert);
 router.get('/edit', ensureAuthenticated,edit);
 router.post('/edit',ensureAuthenticated, update);
 
+
+// github認証処理
+router.get('/github',
+  passport.authenticate('github', { scope: ['user:email'] })
+);
+
+// github認証のコールバック関数
+router.get('/github/callback', githubAuthMiddleware(),gitHubCallback );
+
+// github認証失敗ようのページの表示
+router.get('/failure', (req, res) => {
+    res.render('auth-failure'); // EJSなどのテンプレートエンジンを使用している場合
+});
+
+
+// ルーターをエクスポート
 export default router;
+

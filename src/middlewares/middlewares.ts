@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { selectTaskById } from '../models/taskModel';
+import passport from 'passport';
 
 // ログインしていなければログインページにリダイレクトする
-export const ensureAuthenticated = (req: Request, res: Response, next: NextFunction) => {
+export const ensureAuthenticated =(req: Request, res: Response, next: NextFunction) => {
     if (req.isAuthenticated && req.isAuthenticated()) {
         return next(); // ログイン済み → 次へ
     }
@@ -39,6 +40,14 @@ export const authorizeTaskOwner  = async (req: Request, res: Response, next: Nex
     next();
 
 }
+
+// GitHub認証用のミドルウェア関数(コールバック関数で利用)
+export const githubAuthMiddleware = () => {
+    return passport.authenticate('github', {
+        failureRedirect: '/auth/failure',
+        session: true // セッションを使うことを明示
+    });
+};
 
 // エラーハンドリングミドルウェア
 export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {

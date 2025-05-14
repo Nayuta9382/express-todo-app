@@ -11,6 +11,8 @@ import dotenv from 'dotenv';  // dotenvをインポート
 import authRoutes from './routes/authRoutes';  // 認証ルート
 import flash from 'connect-flash';
 import { ensureAuthenticated, errorHandler, setUserToLocals } from './middlewares/middlewares';
+import { log } from 'console';
+// import './gitHub'; 
 
 
 const port = 3000;
@@ -38,19 +40,26 @@ app.set('layout', 'layouts/layout'); // レイアウトファイルのパスを�
 
 // .envから環境変数を読み込む
 const isProduction = process.env.NODE_ENV === 'production'
+console.log('isProduction', isProduction);
+
+
+app.set('trust proxy', 1);  // 1つのプロキシサーバーを信頼する
 
 
 
 // セッションので設定
 app.use(session({
     secret: process.env.SESSION_SECRET || 'default-secret',  // .envからシークレットを読み込む
+    // resave: true,
     resave: false,
+    // saveUninitialized: true,
     saveUninitialized: false,
     cookie: {
         maxAge: 1000 * 60 * 60 * 2, // セッションの有効期限（例：2時間）
         secure: isProduction,       // 本番環境では secure: true に設定（HTTPSを強制）
         httpOnly: true,             // クライアントサイドのJavaScriptからアクセスできないように
-        sameSite: 'strict'          // クロスサイトリクエストでのCookie送信を制限
+        // sameSite: 'strict'          // クロスサイトリクエストでのCookie送信を制限
+            sameSite: 'lax' // 'strict'から'lax'に変更することでリダイレクト時のCookie送信を許可
       }
 }));
 
@@ -59,6 +68,7 @@ app.use(session({
 // 認証の設定
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 
 // 静的ディレクトリの設定

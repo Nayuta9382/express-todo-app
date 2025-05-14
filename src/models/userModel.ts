@@ -15,7 +15,7 @@ export const userSelectById = async (id:string):  Promise<RowDataPacket | null> 
 };
 
 // ユーザ情報の新規登録
-export const insertUser = async (id:number,name:string,password:string) => {
+export const insertUser = async (id:string,name:string,password:string) => {
 	try {
 		await db.promise().query('INSERT INTO users(id, name, password) VALUES(?, ?, ?)', [id, name, password]);
 	} catch (err) {
@@ -24,7 +24,7 @@ export const insertUser = async (id:number,name:string,password:string) => {
 };
 
 // ユーザ情報更新
-export const updateUser = async (id:number,name:string,imgPath:string) => {
+export const updateUser = async (id:string,name:string,imgPath:string) => {
 	try {
         await db.promise().query('UPDATE users SET name = ?, img_path = COALESCE(?, img_path) WHERE id = ?',[name, imgPath, id]);
     } catch (err) {

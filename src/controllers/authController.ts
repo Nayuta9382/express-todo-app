@@ -150,8 +150,6 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
         // セッションの削除
         delete req.session.oldInput;
 
-
-
         // ファイルが送信されている場合保存されているファイル名を取得
         const userId = (req.user as any).id;
         const user = await userSelectById(userId);
@@ -177,3 +175,16 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
         }
     });
 };
+
+// github認証のコールバック関数
+export const gitHubCallback = 
+  (req: Request, res: Response) => {
+    // リダイレクト前にセッションの保存を確実に行う
+    req.session.save((err) => {
+      if (err) {
+        return res.redirect('/login'); // 500
+      }
+      // ログイン成功後、ダッシュボードなどにリダイレクト
+      res.redirect('/task');
+    });
+  }
