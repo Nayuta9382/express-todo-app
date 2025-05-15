@@ -26,9 +26,10 @@ export const authorizeTaskOwner  = async (req: Request, res: Response, next: Nex
     // タスク情報を取得
     const task = await selectTaskById(taskId);
    if (!task) {
-    const error = new Error('存在しないページまたは、削除されたページです');
-    (error as any).status = 404;
-    return next(error);
+        const error = new Error('指定されたタスクが見つかりません') as any;
+        error.status = 404;
+        error.title = '404 - Task Not Found';
+        return next(error);
     }
 
     if (task.user_id !== userId) {
@@ -52,19 +53,19 @@ export const githubAuthMiddleware = () => {
 // エラーハンドリングミドルウェア
 export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
     if (err.status === 404) {
-        res.status(404).json({
-            message: 'The requested resource was not found',
-            error: err.message,
+        res.status(404).render('error/404', {
+            title: err.title || '404 - Page Not Found',
+            error: err.message || 'お探しのページは存在しないか、移動された可能性があります。',
         });
     } else if (err.status === 403) {
-        res.status(403).json({
-            message: 'Access forbidden: you do not have permission to access this resource',
-            error: err.message || 'Forbidden access',
+        res.status(403).render('error/403', {
+            title: err.title || '403 - Forbidden',
+            error: err.message || 'このページにアクセスする権限がありません。',
         });
     } else {
-        res.status(500).json({
-            message: 'Internal Server Error',
-            error: err.message || 'Unknown error occurred',
+        res.status(500).render('error/500', {
+            title: err.title || '500 - Internal Server Error',
+            error: err.message || 'サーバーで予期しないエラーが発生しました。時間をおいて再度お試しください。',
         });
     }
 };

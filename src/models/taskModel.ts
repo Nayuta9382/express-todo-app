@@ -8,17 +8,27 @@ export const getTaskAll = async (id:string,searchText:string,sort:string,delFlg:
 		const [rows] = await db.promise().query(`SELECT id,user_id,title,detail, DATE_FORMAT(deadline, "%Y-%m-%d") AS deadline FROM tasks WHERE user_id = ? AND del_flg = ? AND title LIKE ? ${orderBy}`,[id,delFlg,`%${searchText}%`]);
 		return rows as RowDataPacket[];
 	} catch (err) {
-		throw new Error('Error fetching tasks: ' + err);
+        console.error(err);
+        const error = new Error() as any;
+        error.status = 500;
+        throw error; 
 	}
 };
 
 // id検索によるタスク情報取得
 export const selectTaskById = async (id:number): Promise<RowDataPacket | null> => {
-    const [rows, fields]: [RowDataPacket[], FieldPacket[]] = await db.promise().query('SELECT id,user_id,title,detail, DATE_FORMAT(deadline, "%Y-%m-%d") AS deadline FROM tasks WHERE id = ?', [id]);
-    if (rows.length === 0) {
-        return null;  // 検索結果が見つからない場合はnullを返す
-    }	
-    return rows[0] as RowDataPacket;
+    try {
+        const [rows, fields]: [RowDataPacket[], FieldPacket[]] = await db.promise().query('SELECT id,user_id,title,detail, DATE_FORMAT(deadline, "%Y-%m-%d") AS deadline FROM tasks WHERE id = ?', [id]);
+        if (rows.length === 0) {
+            return null;  // 検索結果が見つからない場合はnullを返す
+        }	
+        return rows[0] as RowDataPacket;
+	} catch (err) {
+        console.error(err);
+        const error = new Error() as any;
+        error.status = 500;
+        throw error; 
+	}
 }
 
 
@@ -28,7 +38,10 @@ export const addTask = async (userId:string, title:string, detail:string, deadli
         await db.promise().query('INSERT INTO tasks(user_id,title,detail,deadline) VALUES(?,?,?,?)',[userId,title,detail,deadline]);
 
     } catch (err) {
-        throw new Error('task insert error: ' + err);
+        console.error(err);
+        const error = new Error() as any;
+        error.status = 500;
+        throw error; 
     }
 }
 
@@ -38,7 +51,10 @@ export const updateTask = async (id:number, title:string, detail:string, deadlin
         await db.promise().query('UPDATE tasks SET title = ? , detail = ? , deadline = ? WHERE id = ?',[title,detail,deadline,id]);
 
     } catch (err) {
-        throw new Error('task insert error: ' + err);
+       console.error(err);
+        const error = new Error() as any;
+        error.status = 500;
+        throw error; 
     }
 }
 
@@ -48,7 +64,10 @@ export const deleteTask = async (id:number) => {
         await db.promise().query('UPDATE tasks SET del_flg = 1 WHERE id = ?',[id]);
 
     } catch (err) {
-        throw new Error('task insert error: ' + err);
+        console.error(err);
+        const error = new Error() as any;
+        error.status = 500;
+        throw error; 
     }
 }
 

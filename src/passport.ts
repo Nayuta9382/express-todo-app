@@ -51,10 +51,9 @@ passport.use(new GitHubStrategy({
     try {
         let user = await userSelectById(id);
         if (!user) {
-            console.log("登録処理");
             
-            await insertUser(id, displayName || 'No name', '');
-            user = await userSelectById(id);
+            await insertUser(`github_${id}`, displayName || 'No name', '');
+            user = await userSelectById(`github_${id}`);
         }
 
         return done(null, user || false);

@@ -18,7 +18,7 @@ const db: Pool = mysql.createPool({
 // 接続関数を明示的に呼び出す用に定義
 export const connectDB = () => {
  db.getConnection((err: any | null, connection: PoolConnection) => {
-            if (err) {
+        if (err) {
         console.error('MySQLへの接続に失敗しました: ', err);
         return;
         }

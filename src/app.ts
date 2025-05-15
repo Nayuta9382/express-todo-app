@@ -86,11 +86,38 @@ app.use(setUserToLocals);
 
 
 // ルーティングの呼び出し 
-app.get('/', (req, res) => {
-    return res.redirect('/auth/login');  // 認証失敗時トップページにリダイレクト
+app.get('/', async (req, res, next) => {
+    try {
+        return res.redirect('/auth/login');
+    } catch (err) {
+        next(err); // エラーハンドリングミドルウェアへ
+    }
 });
-app.use('/task', ensureAuthenticated,todoRoutes);
-app.use('/auth',authRoutes); 
+
+// 認証が必要なタスク関連ルート
+app.use('/task', async (req, res, next) => {
+    try {
+        await ensureAuthenticated(req, res, next);
+    } catch (err) {
+        next(err);
+    }
+}, todoRoutes);
+
+// 認証関連ルート
+app.use('/auth', async (req, res, next) => {
+    try {
+        await authRoutes(req, res, next);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// 404ルーティング
+app.use((req, res, next) => {
+    const error = new Error() as any;
+    error.status = 404;
+    next(error); // errorHandler に渡す
+});
 
 
 // エラーハンドリングミドルウェア

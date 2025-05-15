@@ -37,7 +37,7 @@ router.get('/github/callback', githubAuthMiddleware(),gitHubCallback );
 
 // github認証失敗ようのページの表示
 router.get('/failure', (req, res) => {
-    res.render('auth-failure'); // EJSなどのテンプレートエンジンを使用している場合
+    res.render('error/auth-failure'); // EJSなどのテンプレートエンジンを使用している場合
 });
 
 

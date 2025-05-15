@@ -12,7 +12,12 @@ import { ValidationError, validationResult } from 'express-validator';
 // ログインページを表示
 export const showLogin = (req: Request, res: Response,next: NextFunction) => {
     req.session.destroy((err) => {
-        if (err) return next(err);
+        if (err) {
+            console.error(err);
+            const error = new Error() as any;
+            error.status = 500;
+            return next(error);
+        }
 
         // クッキーに保存されているセッションIDも削除
         res.clearCookie('connect.sid');
@@ -43,14 +48,20 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
 // ログアウト処理
 export const logout = (req: Request, res: Response, next: NextFunction) => {
     req.logout((err) => {
-        if (err) {
-            return next(err); // ログアウト時のエラーを次のミドルウェアに渡す
+          if (err) {
+            console.error(err);            
+            const error = new Error() as any;
+            error.status = 500;
+            return next(error);
         }
 
         // セッションの完全な破棄
         req.session.destroy((err) => {
             if (err) {
-                return next(err); // セッション破棄時のエラーを次のミドルウェアに渡す
+                console.error(err);
+                const error = new Error() as any;
+                error.status = 500;
+                return next(error);
             }
 
             // セッションIDを保持するクッキーも削除
@@ -77,10 +88,10 @@ export const add = (req: Request, res: Response) => {
 }
 // データベースにユーザ情報を登録
 export const insert =  async (req: Request, res: Response, next: NextFunction) =>{
-    if (handleValidationErrors(req, res, '/auth/signup')) return;    
+	try {
+        if (handleValidationErrors(req, res, '/auth/signup')) return;    
     
 
-	try {
 		const { id, name, password,confirmPassword } = req.body; // POSTデータを取得
 
 		// IDの重複を確認
@@ -105,8 +116,10 @@ export const insert =  async (req: Request, res: Response, next: NextFunction) =
 		res.redirect('/auth/login'); // 登録後、ログインページにリダイレクト
 
 	} catch (err:any) {
-	console.error('ユーザー登録エラー:', err);
-	next(err);  // 500エラーとしてエラーハンドリングミドルウェアに渡す
+        console.error(err);
+        const error = new Error() as any;
+        error.status = 500;
+        return next(error);
 	}
 }
 
@@ -126,8 +139,15 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
     // ファイルのアップロード処理
     upload.single('profile-img')(req, res, async (err: any) => {
         // バリデーションの実行
-        await Promise.all(validateUpdateUser.map(validation => validation.run(req)));
-    
+        try{
+            await Promise.all(validateUpdateUser.map(validation => validation.run(req)));
+        } catch (err:any) {
+            console.error(err);
+            const error = new Error() as any;
+            error.status = 500;
+            return next(error);
+        }
+
         // バリデーションエラーがあればリダイレクトする
         if (handleValidationErrors(req, res, '/auth/edit',true)) return;  // バリデーションエラーがあればリダイレクト
         // エラーハンドリング(ファイルが送信されていない場合はアップロード処理自体は行わない)
@@ -151,39 +171,44 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
         delete req.session.oldInput;
 
         // ファイルが送信されている場合保存されているファイル名を取得
-        const userId = (req.user as any).id;
-        const user = await userSelectById(userId);
-        let filePath = user && user.img_path;
-
-        if (req.file) {
-            // 既に保存されているデフォルト画像以外の画像を削除
-            if (user?.img_path && user.img_path.startsWith('/uploads/') && user.img_path !== '/uploads/default-img.png') {
-                deleteFileIfExists(user.img_path);
-            }
-            
-            filePath = `/uploads/${req.file.filename}`;
-        }
-
-        // データベースへの保存処理
-        const { name } = req.body; // POSTデータを取得
-
         try {
+            const userId = (req.user as any).id;
+            const user = await userSelectById(userId);
+            let filePath = user && user.img_path;
+
+            if (req.file) {
+                // 既に保存されているデフォルト画像以外の画像を削除
+                if (user?.img_path && user.img_path.startsWith('/uploads/') && user.img_path !== '/uploads/default-img.png') {
+                    deleteFileIfExists(user.img_path);
+                }
+                
+                filePath = `/uploads/${req.file.filename}`;
+            }
+
+            // データベースへの保存処理
+            const { name } = req.body; // POSTデータを取得
+
             await updateUser(userId, name, filePath);
             return res.redirect('/task');
         } catch (err) {
-            next(err); // エラーがあれば次のミドルウェアへ
+            console.error(err);
+            const error = new Error() as any;
+            error.status = 500;
+            return next(error);
         }
     });
 };
 
 // github認証のコールバック関数
 export const gitHubCallback = 
-  (req: Request, res: Response) => {
+  (req: Request, res: Response,next:NextFunction) => {
     // リダイレクト前にセッションの保存を確実に行う
     req.session.save((err) => {
       if (err) {
-        return res.redirect('/login'); // 500
-      }
+            console.error(err);
+            const error = new Error() as any;
+            error.status = 500;
+            return next(error);      }
       // ログイン成功後、ダッシュボードなどにリダイレクト
       res.redirect('/task');
     });
