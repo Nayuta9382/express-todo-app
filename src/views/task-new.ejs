@@ -1,38 +1,50 @@
-<%- contentFor('title') %>タスク追加
+<%- contentFor('title') %>タスク作成
 
 <%- contentFor('body') %>
-<h1>タスク追加</h1>
-<form action="/task/new" method="post" id="form">
+<h3 class="hedding mx-auto mt-4">タスク作成</h3>
+<form action="/task/new" method="post" id="form" class="mt-4 mx-auto d-flex flex-column align-items-center gap-3">
     
-    <label for="title">タイトル</label>
-    <% if (errors.title) { %>
-        <% errors.title.forEach(function(msg) { %>
-            <p class="error"><%= msg %></p>
-        <% }); %>
-    <% } %>
-    <input type="text" name="title" id="title" value="<%= oldInput.title || '' %>">
-    <br/>
+    <div class="field-block">
+        <label for="title" class="form-label">タイトル</label>
+        <% if (errors.title) { %>
+            <div class="error mb-2">
+                <% errors.title.forEach(function(msg) { %>
+                    <p><%= msg %></p>
+                <% }); %>
+            </div>
+        <% } %>
+        <input type="text" name="title" id="title" value="<%= oldInput.title || '' %>" class="form-control" placeholder="例：買い物リストを作成する">
+    </div>
 
-    <label for="detail">詳細</label>
-     <% if (errors.detail) { %>
-        <% errors.detail.forEach(function(msg) { %>
-            <p class="error"><%= msg %></p>
-        <% }); %>
-    <% } %>
-    <textarea name="detail" id="detail"><%= oldInput.detail || '' %></textarea>
-    <br/>
+    <div class="field-block">
+        <label for="detail" class="form-label">詳細</label>
+        <% if (errors.detail) { %>
+            <div class="error mb-2">
+                <% errors.detail.forEach(function(msg) { %>
+                    <p class="error"><%= msg %></p>
+                <% }); %>
+                </div>
+        <% } %>
+        <textarea name="detail" id="detail" class="form-control" rows="4" placeholder="例：牛乳、卵、パンを忘れずに購入する"><%= oldInput.detail || '' %></textarea>
+    </div>
 
-    <label for="deadline">期限</label>
-     <% if (errors.deadline) { %>
-        <% errors.deadline.forEach(function(msg) { %>
-                <p class="error"><%= msg %></p>
-        <% }); %>
-    <% } %>
-    <input type="date" name="deadline" id="deadline" value="<%= oldInput.deadline || '' %>">
-    <br/>
+   <div class="field-block">
+       <label for="deadline" class="form-label">期限</label>
+        <% if (errors.deadline) { %>
+            <div class="error mb-2">
+                <% errors.deadline.forEach(function(msg) { %>
+                    <p><%= msg %></p>
+                <% }); %>
+            </div>
+        <% } %>
+        <input type="date" name="deadline" id="deadline" value="<%= oldInput.deadline || '' %>" class="form-control">
+   </div>
 
-    <button type="submit">登録</button>
+    <div class="field-block">
+        <button class="mt-1 d-block btn btn-dark ms-auto  button" type="submit">作成</button>
+    </div>
 </form>
- <% if (errors && errors.length > 0) { %>
-    <%=errors[0]%>
+<% if (!oldInput.deadline) { %>
+    <script type="module" src="/js/today.js"></script>
 <% } %>
+

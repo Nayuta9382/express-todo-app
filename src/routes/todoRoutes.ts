@@ -14,7 +14,7 @@ router.get('/',showTodoList);
 // 新規追加ページ表示
 router.get('/new',add);
 // 新規登録処理
-router.post('/new',authorizeTaskOwner,validateTask,insert);
+router.post('/new',validateTask,insert);
 // 詳細ページ表示
 router.get('/detail/:id',authorizeTaskOwner ,showDetail);
 // 更新ページ表示

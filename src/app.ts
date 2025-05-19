@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
-import http from 'http';
+import http, { IncomingMessage } from 'http';
 import todoRoutes from './routes/todoRoutes';
 import expressLayouts from 'express-ejs-layouts';
 import path from 'path';
@@ -12,6 +12,8 @@ import authRoutes from './routes/authRoutes';  // 認証ルート
 import flash from 'connect-flash';
 import { ensureAuthenticated, errorHandler, setUserToLocals } from './middlewares/middlewares';
 import { log } from 'console';
+import crypto from 'crypto';
+
 // import './gitHub'; 
 
 
@@ -73,8 +75,30 @@ app.use(passport.session());
 app.use(express.static('public'));
 // formからデータを受け取る設定
 app.use(express.urlencoded({extended:true}));
+
+
 // helmetミドルウェアを使って基本的なセキュリティヘッダーを追加
-app.use(helmet());
+
+
+
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "https://cdn.jsdelivr.net"],  // CDNドメインを追加
+        styleSrc: ["'self'", "https://cdn.jsdelivr.net"],   // CDNドメインを追加
+        fontSrc: ["'self'", "https://cdn.jsdelivr.net"],    // フォント読み込み用に追加
+        imgSrc: ["'self'", "data:"],                        // 画像でdata URIも許可（Bootstrapのアイコンなど）
+        objectSrc: ["'none'"],
+        baseUri: ["'self'"],
+        frameAncestors: ["'self'"],
+        formAction: ["'self'"],
+        upgradeInsecureRequests: []
+      }
+    }
+  })
+);
 // flash メッセージを使う設定
 app.use(flash());
 

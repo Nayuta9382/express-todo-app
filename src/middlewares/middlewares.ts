@@ -21,6 +21,7 @@ export const setUserToLocals = (req: Request, res: Response, next: NextFunction)
 export const authorizeTaskOwner  = async (req: Request, res: Response, next: NextFunction) =>{
     // ユーザーidの取得
     const userId = (req.user as any).id;
+    
     // パスパラメータからタスクidを取得
     const taskId = parseInt(req.params.id);
     // タスク情報を取得

@@ -37,7 +37,8 @@ export const upload = multer({
         if (allowed.includes(file.mimetype)) {
             cb(null, true);
         } else {
-            cb(new Error('対応していないファイル形式です'));
+            // cb(new Error('対応していないファイル形式です'));
+             cb(null, false);
         }
     }
 });

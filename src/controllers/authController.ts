@@ -147,25 +147,32 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
             error.status = 500;
             return next(error);
         }
-
         // バリデーションエラーがあればリダイレクトする
         if (handleValidationErrors(req, res, '/auth/edit',true)) return;  // バリデーションエラーがあればリダイレクト
         // エラーハンドリング(ファイルが送信されていない場合はアップロード処理自体は行わない)
+        
         if (err) {
             // サイズ超過エラー
+            // ファイルタイプが不正な場合
             if (err.code === 'LIMIT_FILE_SIZE') {
                 req.flash('uploadError', 'ファイルサイズが大きすぎます。最大サイズは2MBです。');
             } 
-            // ファイルタイプが不正な場合
-            else if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+            else if (err.code === 'LIMIT_UNEXPECTED_FILE' || err.message === '対応していないファイル形式です') {
                 req.flash('uploadError', '無効なファイルタイプです。JPEG, PNG, GIF のいずれかの画像ファイルをアップロードしてください。');
             }
             // その他のエラー
             else {
                 req.flash('uploadError', 'ファイルのアップロード中にエラーが発生しました。再度お試しください。');
             }
-            return res.redirect('/auth/edit'); // エラー発生時にリダイレクト
+            return res.redirect('/auth/edit');
+      
         }
+
+        if (!req.file) {
+            req.flash('uploadError', '無効なファイルタイプです。JPEG, PNG, GIF のいずれかの画像をアップロードしてください。');
+            return res.redirect('/auth/edit');
+        }
+        
 
         // セッションの削除
         delete req.session.oldInput;

@@ -40,6 +40,7 @@ export const add =  (req:Request, res:Response ) =>{
 }
 // 新規登録処理
 export const insert = async (req:Request, res:Response ,next:NextFunction) =>{
+    
     // バリデーションエラーがあるのなら
     if (handleValidationErrors(req, res, '/task/new')) return;    
     

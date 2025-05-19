@@ -1,51 +1,66 @@
 <%- contentFor('title') %>サインアップ
 
 <%- contentFor('body') %>
-    <h1>ユーザー登録</h1>
-
-    <form action="signup" method="post">
-
-        <label for="id">ID</label>
+<h3 class="hedding mx-auto">サインアップ</h3>
+<form action="/auth/signup" method="post" class="mt-4 mx-auto d-flex flex-column align-items-center gap-3">
+    <div class="field-block">
+        <label for="id" class="form-label">ID</label>
         <% if (customItem.idError) { %>
-        <p class="error"><%= customItem.idError %></p>
+            <div class="error mb-2">
+                <p><%= customItem.idError %></p>
+            </div>
         <% } %>
         <% if (errors.id) { %>
-            <% errors.id.forEach(function(msg) { %>
-                <p class="error"><%= msg %></p>
-            <% }); %>
+            <div class="error mb-2">
+                <% errors.id.forEach(function(msg) { %>
+                    <p><%= msg %></p>
+                <% }); %>
+            </div> 
         <% } %>
-        <input type="text" name="id" id="id" value="<%= oldInput.id || '' %>">
-        <br/>
+        <input type="text" name="id" id="id" value="<%= oldInput.id || '' %>" class="form-control" placeholder="例: user123">
+    </div>
 
-        <label for="name">名前</label>
+    <div class="field-block">
+        <label for="name" class="form-label">名前</label>
         <% if (errors.name) { %>
-            <% errors.name.forEach(function(msg) { %>
-                <p class="error"><%= msg %></p>
-            <% }); %>
+            <div class="error mb-2">
+                <% errors.name.forEach(function(msg) { %>
+                    <p><%= msg %></p>
+                <% }); %>
+            </div> 
         <% } %>
-        <input type="text" name="name" id="name" value="<%= oldInput.name || '' %>">
-        <br/>
+        <input type="text" name="name" id="name" value="<%= oldInput.name || '' %>" class="form-control" placeholder="例: 山田 太郎">
+    </div>
 
-        <label for="password">パスワード</label>
+    <div class="field-block">
+        <label for="password" class="form-label">パスワード</label>
         <% if (customItem.passwordError) { %>
-            <p class="error"><%= customItem.passwordError %></p>
+            <div class="error mb-2">
+                <p><%= customItem.passwordError %></p>
+            </div> 
         <% } %>
         <% if (errors.password) { %>
-            <% errors.password.forEach(function(msg) { %>
-                <p class="error"><%= msg %></p>
-            <% }); %>
+            <div class="error mb-2">
+                <% errors.password.forEach(function(msg) { %>
+                    <p><%= msg %></p>
+                <% }); %>
+            </div> 
         <% } %>
-        <input type="password" name="password" id="password">
-        <br/>
+        <input type="password" name="password" id="password" class="form-control" placeholder="8文字以上で入力">
+        <small class="help-text text-muted">8文字以上で入力してください</small>
+    </div>
 
-        <label for="confirmPassword">パスワード確認:</label>
+    <div class="field-block">
+        <label for="confirmPassword" class="form-label">パスワード確認</label>
         <% if (errors.confirmPassword) { %>
-            <% errors.confirmPassword.forEach(function(msg) { %>
-                <p class="error"><%= msg %></p>
-            <% }); %>
+            <div class="error mb-2">
+                <% errors.confirmPassword.forEach(function(msg) { %>
+                    <p><%= msg %></p>
+                <% }); %>
+            </div> 
         <% } %>
-        <input type="password" id="confirmPassword" name="confirmPassword" >
-        <br>
+        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="もう一度入力">
+    </div>
 
-        <button type="submit">登録</button>
-    </form>
+    <button class="mt-1 d-block w-25   user-button btn btn-dark" type="submit">サインアップ</button>
+</form>

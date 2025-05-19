@@ -2,23 +2,56 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title><%= typeof title !== 'undefined' ? title : 'デフォルトタイトル' %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/style.css">
+  <title><%= typeof title !== 'undefined' ? `Todo-App ${title}` : 'Todo-App' %></title>
 </head>
 <body>
     <% if (user) { %>
-        <header>
-        <a href="/task/new">タスク追加</a>
-        <a href="/auth/edit">アカウント情報編集</a>
-        <a href="/auth/logout">ログアウト</a>
-        </header>
+    <header class="position-fixed top-0 w-100 d-flex bg-body-tertiary px-2">
+        <nav class="navbar navbar-expand-md flex-grow-1 " >
+            <div class="container-fluid px-0">
+                <a class="navbar-brand" href="/task">Todo-App</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <div class="w-100">
+                        <ul class="navbar-nav w-full mb-2 mb-md-0 d-flex justify-content-between">
+                            <div class="d-contents" >
+                                <li class="nav-item">
+                                <a class="nav-link text-dark" aria-current="page" href="/task">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                <a class="nav-link text-dark" href="/task/new">タスク作成</a>
+                                </li>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="dropdown user-menu">
+            <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="<%= user.img_path %>" alt="プロフィール画像" width="32" height="32" class="border border-light-gray rounded-circle">
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                <li><a class="dropdown-item" href="/auth/edit">プロフィール編集</a></li>
+                <li><a class="dropdown-item" href="/auth/logout">ログアウト</a></li>
+            </ul>
+        </div>
+    </header>
     <% } %>
 
     <main>
-    <%- body %> <!-- 動的にコンテンツが挿入される部分 -->
+    <%- body %>
     </main>
 
     <footer>
-    <p>共通フッター</p>
+        &copy; Kumagai Nayuta
     </footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 </body>
 </html>

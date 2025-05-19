@@ -1,29 +1,41 @@
-<%- contentFor('title') %>ユーザー情報変更
+<%- contentFor('title') %>プロフィール変更
 
 <%- contentFor('body') %>
-<h1>ユーザー情報変更</h1>
-<form action="/auth/edit" method="post" enctype="multipart/form-data">
-    <label for="name">ユーザー名</label>
-     <% if (errors.name) { %>
-        <% errors.name.forEach(function(msg) { %>
-            <p class="error"><%= msg %></p>
-        <% }); %>
-    <% } %>
-    <input type="text" name="name" id="name" value="<%= typeof oldInput.name !== 'undefined' ? oldInput.name : user.name %>">
-    <br/>
-    <label for="profile-img">プロフィール画像</label>
-    <img src="<%= user.img_path %>" alt="プロフィール画像" srcset="">
-    <input type="file" name="profile-img" id="profile-img">
-    <% if ( customItem.uploadError) { %>
-        <%=  customItem.uploadError %>
-    <% } %>
-    <button type="submit">登録</button>
+<h3 class="hedding mx-auto mt-4">プロフィール変更</h3>
+<form action="/auth/edit" method="post" enctype="multipart/form-data" class="mt-4 mx-auto d-flex flex-column align-items-center gap-3">
+     <div class="field-block">
+        <label for="name" class="form-label">ユーザー名</label>
+         <% if (errors.name) { %>
+             <div class="error mb-2">
+                 <% errors.name.forEach(function(msg) { %>
+                     <p><%= msg %></p>
+                 <% }); %>
+            </div> 
+        <% } %>
+        <input type="text" name="name" id="name" value="<%= typeof oldInput.name !== 'undefined' ? oldInput.name : user.name %>" class="form-control" placeholder="例：user123">
+    </div>
+
+
+    <div class="field-block">
+        <label for="profile-img" class="form-label">プロフィール画像</label>
+        <small class="d-block help-text text-muted mb-1">JPEG, PNG, GIF の画像ファイルのみ選択してください。</small>
+        <small class="d-block help-text text-muted mb-1">ファイルサイズは最大2MBまでです。</small>
+        <% if (customItem.uploadError) { %>
+            <div class="error mb-2">
+               <p><%= customItem.uploadError %></p>
+            </div>
+        <% } %>
+        <div class="d-flex flex-column align-items-center gap-3 p-3 border rounded" >
+            <img id="profile-img-edit" src="<%= user.img_path %>" alt="プロフィール画像" class="img-fluid rounded">
+            <input id="profile-img-fileInput" type="file" name="profile-img"  accept=".jpg,.jpeg,.png,.gif"  class="form-control" id="profile-img">
+        </div>
+    </div>
+
+  <div class="field-block d-flex justify-content-end gap-3">
+      <a href="/task" class="mt-1 d-block btn button  back-button" type="submit">戻る</a>
+      <button class="mt-1 d-block btn btn-dark   button" type="submit">編集</button>
+    </div>
 </form>
 
-<style>
-    img{
-        display: block;
-        width: 30px;
-        height: 30px;
-    }
-</style>
+<script type="module" src="/js/profileImg.js"></script>
+

@@ -1,8 +1,23 @@
 <%- contentFor('title') %>タスク詳細
 
 <%- contentFor('body') %>
-<h1><%= task.title %></h1>
-<p><%= task.detail %></p>
-<p><%= task.deadline %></p>
-<a href="/task/edit/<%= task.id %>">編集</a>
-<a href="/task/delete/<%= task.id %>">削除</a>
+<h3 class="hedding mx-auto mt-4"><%= task.title %></h3>
+<div class=" mt-4 mx-auto d-flex flex-column align-items-center gap-3  detail">
+    <div class="field-block">
+        <label class="form-label">詳細</label>
+        <p class="form-control border-0 bg-transparent"><%= task.detail %></p>
+    </div>
+    <div class="field-block">
+        <label class="form-label">期限</label>
+        <% 
+        const dateObj = new Date(task.deadline);
+        const formattedDate = `${dateObj.getFullYear()}年${dateObj.getMonth() + 1}月${dateObj.getDate()}日`;
+        %>
+        <p class="form-control border-0 bg-transparent"><%= formattedDate %></p>
+    </div>
+    <div class="field-block d-flex justify-content-end gap-3">
+        <a class="d-block btn btn-dark border-0   button bg-bule" href="/task/edit/<%= task.id %>">編集</a>
+        <a class="d-block btn btn-dark border-0   button bg-red"  href="/task/delete/<%= task.id %>">削除</a>
+    </div>
+</div>
+
