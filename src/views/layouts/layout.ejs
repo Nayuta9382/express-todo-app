@@ -13,7 +13,7 @@
     <header class="position-fixed top-0 w-100 d-flex bg-body-tertiary px-2">
         <nav class="navbar navbar-expand-md flex-grow-1 " >
             <div class="container-fluid px-0">
-                <a class="navbar-brand" href="/task">Todo-App</a>
+                <a class="navbar-brand interactive" href="/task">Todo-App</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -22,10 +22,10 @@
                         <ul class="navbar-nav w-full mb-2 mb-md-0 d-flex justify-content-between">
                             <div class="d-contents" >
                                 <li class="nav-item">
-                                <a class="nav-link text-dark" aria-current="page" href="/task">Home</a>
+                                <a class="nav-link text-dark interactive" aria-current="page" href="/task">Home</a>
                                 </li>
                                 <li class="nav-item">
-                                <a class="nav-link text-dark" href="/task/new">タスク作成</a>
+                                <a class="nav-link text-dark interactive" href="/task/new">タスク作成</a>
                                 </li>
                             </div>
                         </ul>
@@ -34,10 +34,10 @@
             </div>
         </nav>
         <div class="dropdown user-menu">
-            <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <a href="#" class="interactive d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="<%= user.img_path %>" alt="プロフィール画像" width="32" height="32" class="border border-light-gray rounded-circle">
             </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <ul class="dropdown-menu dropdown-menu-end"  aria-labelledby="userDropdown">
                 <li><a class="dropdown-item" href="/auth/edit">プロフィール編集</a></li>
                 <li><a class="dropdown-item" href="/auth/logout">ログアウト</a></li>
             </ul>

@@ -37,11 +37,12 @@
                 <% }); %>
             </div>
         <% } %>
-        <input type="date" name="deadline" id="deadline" value="<%= oldInput.deadline || '' %>" class="form-control">
+            <input type="date" name="deadline" id="deadline" value="<%= oldInput.deadline || '' %>" class="form-control">
    </div>
 
-    <div class="field-block">
-        <button class="mt-1 d-block btn btn-dark ms-auto  button" type="submit">作成</button>
+    <div class="field-block mt-1 d-flex justify-content-end gap-3">
+        <a href="/task/" class=" d-block btn button  back-button">戻る</a>
+        <button class="d-block btn btn-dark   button" type="submit">作成</button>
     </div>
 </form>
 <% if (!oldInput.deadline) { %>

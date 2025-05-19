@@ -63,12 +63,24 @@ footer{
 }
 
 .bg-red{
-    /* background-color: #E58C8A; */
     background-color: #f65c5a;
 }
+.bg-red:hover{
+    background-color: #f97b79;
+}
+.bg-red:active{
+    background-color: #f65c5a!important;
+}
+
 .bg-bule{
     /* background-color: #80A4ED; */
     background-color: #6593ef;
+}
+.bg-bule:hover{
+    background-color: rgba(98, 145, 240, 0.8);
+}
+.bg-bule:active{
+ background-color: #6593ef!important;
 }
 .w-4{
     width: 1rem;
@@ -138,9 +150,8 @@ li{
 }
 
 .back-button{
-    background-color: #ebebed;
+    background-color: #ffffff;
     border: 1px solid ;
-    width: 90px;
 }
 .back-button:hover{
     background-color: #ffffff;
@@ -152,7 +163,7 @@ width: 90px;
 
 }
 .select-btn:hover{
-    background-color: rgba(101, 147, 239, 0.8);
+    background-color: rgba(98, 145, 240, 0.8);
 }
 .select-btn:active{
  background-color: #6593ef!important;
@@ -345,4 +356,30 @@ width: 90px;
 }
 .mr-5{
     margin-right: 10px!important;
+}
+
+
+.interactive {
+    transition: opacity 0.2s ease-in-out;
+}
+
+.interactive:hover,
+.interactive:active {
+    opacity: 0.6;
+}
+
+.dropdown-item:active {
+    background-color: #f8f9fa;
+    color: #212529; 
+}
+.pl-1{
+    padding-left: 4px!important;
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
 }

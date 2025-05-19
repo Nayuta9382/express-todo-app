@@ -24,25 +24,25 @@
         
         <div class="scrollbar-wrapper  list-data p-0 m-0 d-flex flex-column gap-2 ">
             <% if (delFlg === 1) { %>
-                <a class="d-block btn btn-dark border-0 text-nowrap mb-1 ms-auto   button bg-red sm-link"  href="#">完了を取り消す</a>
+                <a class="d-block btn text-white  border-0 text-nowrap mb-1 ms-auto   button bg-red sm-link"  href="#">完了を取り消す</a>
             <% } else { %>
-                <a class="d-block btn btn-dark border-0 text-nowrap mb-1 ms-auto   button bg-red sm-link"  href="#">完了</a>
+                <a class="d-block btn text-white  border-0 text-nowrap mb-1 ms-auto   button bg-red sm-link"  href="#">完了</a>
             <% } %>
-            <ul class="task-ul <% if (tasks.length > 5) { %>mr-5<% } %> ml-4 d-flex align-items-end  p-0 pb-2 m-0 underline-black">
+            <ul class="task-ul pl-1<% if (tasks.length > 5) { %>mr-5<% } %> ml-4 d-flex align-items-end  p-0 pb-2 m-0 underline-black">
                 <li class="w-4  text-center ">&#10004;</li>
                 <li class="list-title px-2 ">タイトル</li>
-                <li class="list-date px-2   list-date-title ">期限&nbsp;<a href="/task?sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&task-status=<%= delFlg === 1 ? 1 : 0 %><%= searchText !== '' ? `&search=${searchText}` : '' %>"><img src="/img/arrow-circle-<%= sort === 'asc' ? 'up' : 'down' %>.svg" alt="ソートアイコン"></a></li>
+                <li class="list-date px-2   list-date-title "><a class="interactive text-dark text-decoration-none" href="/task?sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&task-status=<%= delFlg === 1 ? 1 : 0 %><%= searchText !== '' ? `&search=${searchText}` : '' %>">期限&nbsp;<img src="/img/arrow-circle-<%= sort === 'asc' ? 'up' : 'down' %>.svg" alt="ソートアイコン"></a></li>
                  <% if (delFlg === 1) { %>
-                    <a class=" d-block btn btn-dark border-0 text-nowrap  md-link button bg-red comp-button-max"  href="#">完了を取り消す</a>
+                    <a class=" d-block btn text-white border-0 text-nowrap  md-link button bg-red comp-button-max"  href="#">完了を取り消す</a>
                 <% } else { %>
-                    <a class=" d-block btn btn-dark border-0 text-nowrap  md-link button bg-red comp-button-min"  href="#">完了</a>
+                    <a class=" d-block btn text-white border-0 text-nowrap  md-link button bg-red comp-button-min"  href="#">完了</a>
                 <% } %>
             </ul>
             <div class="tasks scroll-content d-flex flex-column gap-2 ">
             <% tasks.forEach(task => { %>
                 <ul class="w-full  d-flex align-items-center p-0 m-0 underline-black pb-2">
-                    <span class="d-block d-flex align-items-center "><input class="form-check-input d-block  checkbox-black " type="checkbox" value="" id="flexCheckChecked"></span>
-                    <li class="list-title px-2 "><a class="text-dark" href="/task/detail/<%= task.id %>"><%= task.title %></a></li>
+                    <label class="pl-1 d-block d-flex align-items-center pointer"><input class="form-check-input d-block  checkbox-black pointer " type="checkbox" value="" id="flexCheckChecked"></label>
+                    <li class="list-title px-2 "><a class="text-dark interactive" href="/task/detail/<%= task.id %>"><%= task.title %></a></li>
                     <%
                     const dateStr = task.deadline;
                     const date = new Date(dateStr);
