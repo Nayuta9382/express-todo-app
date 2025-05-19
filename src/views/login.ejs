@@ -5,11 +5,11 @@
 <form id="login-form" action="/auth/login" method="post" class="mt-5 mx-auto d-flex flex-column  align-items-center gap-3">
     <div class="w-50">
         <label for="id" class="form-label">ID</label>
-        <input type="text" name="id" id="id" autocomplete="username" class="form-control" placeholder="IDを入力してください">
+        <input type="text" name="id" id="id" autocomplete="username" class="form-control" placeholder="IDを入力してください" required>
     </div>
     <div class="w-50">
         <label for="password" class="form-label">パスワード</label>
-        <input type="password" name="password" id="password" autocomplete="current-password" class="form-control" placeholder="パスワードを入力してください">
+        <input type="password" name="password" id="password" autocomplete="current-password" class="form-control" placeholder="パスワードを入力してください" required>
     </div>
     <% if (typeof error !== 'undefined' && error) { %>
     <div class="error mt-1">

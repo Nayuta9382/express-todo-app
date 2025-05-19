@@ -383,3 +383,9 @@ width: 90px;
 input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
 }
+
+.required::after {
+    content: " *";
+    color: red;
+    margin-left: 0px;
+}

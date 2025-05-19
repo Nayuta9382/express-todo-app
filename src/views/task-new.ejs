@@ -5,7 +5,7 @@
 <form action="/task/new" method="post" id="form" class="mt-4 mx-auto d-flex flex-column align-items-center gap-3">
     
     <div class="field-block">
-        <label for="title" class="form-label">タイトル</label>
+        <label for="title" class="form-label required">タイトル</label>
         <% if (errors.title) { %>
             <div class="error mb-2">
                 <% errors.title.forEach(function(msg) { %>
@@ -13,7 +13,7 @@
                 <% }); %>
             </div>
         <% } %>
-        <input type="text" name="title" id="title" value="<%= oldInput.title || '' %>" class="form-control" placeholder="例：買い物リストを作成する">
+        <input type="text" name="title" id="title" value="<%= oldInput.title || '' %>" class="form-control" placeholder="例：買い物リストを作成する" required>
     </div>
 
     <div class="field-block">
@@ -29,7 +29,7 @@
     </div>
 
    <div class="field-block">
-       <label for="deadline" class="form-label">期限</label>
+       <label for="deadline" class="form-label required">期限</label>
         <% if (errors.deadline) { %>
             <div class="error mb-2">
                 <% errors.deadline.forEach(function(msg) { %>
@@ -37,7 +37,7 @@
                 <% }); %>
             </div>
         <% } %>
-            <input type="date" name="deadline" id="deadline" value="<%= oldInput.deadline || '' %>" class="form-control">
+            <input type="date" name="deadline" id="deadline" value="<%= oldInput.deadline || '' %>" class="form-control" required>
    </div>
 
     <div class="field-block mt-1 d-flex justify-content-end gap-3">

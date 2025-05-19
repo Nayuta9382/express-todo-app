@@ -4,7 +4,7 @@
 <h3 class="hedding mx-auto">サインアップ</h3>
 <form action="/auth/signup" method="post" class="mt-4 mx-auto d-flex flex-column align-items-center gap-3">
     <div class="field-block">
-        <label for="id" class="form-label">ID</label>
+        <label for="id" class="form-label required">ID</label>
         <% if (customItem.idError) { %>
             <div class="error mb-2">
                 <p><%= customItem.idError %></p>
@@ -17,11 +17,11 @@
                 <% }); %>
             </div> 
         <% } %>
-        <input type="text" name="id" id="id" value="<%= oldInput.id || '' %>" class="form-control" placeholder="例: user123">
+        <input type="text" name="id" id="id" value="<%= oldInput.id || '' %>" class="form-control" placeholder="例: user123" required>
     </div>
 
     <div class="field-block">
-        <label for="name" class="form-label">名前</label>
+        <label for="name" class="form-label required">名前</label>
         <% if (errors.name) { %>
             <div class="error mb-2">
                 <% errors.name.forEach(function(msg) { %>
@@ -29,11 +29,11 @@
                 <% }); %>
             </div> 
         <% } %>
-        <input type="text" name="name" id="name" value="<%= oldInput.name || '' %>" class="form-control" placeholder="例: 山田 太郎">
+        <input type="text" name="name" id="name" value="<%= oldInput.name || '' %>" class="form-control" placeholder="例: 山田 太郎" required autocomplete="username">
     </div>
 
     <div class="field-block">
-        <label for="password" class="form-label">パスワード</label>
+        <label for="password" class="form-label required">パスワード</label>
         <% if (customItem.passwordError) { %>
             <div class="error mb-2">
                 <p><%= customItem.passwordError %></p>
@@ -46,12 +46,12 @@
                 <% }); %>
             </div> 
         <% } %>
-        <input type="password" name="password" id="password" class="form-control" placeholder="8文字以上で入力">
+        <input type="password" name="password" id="password" class="form-control" placeholder="8文字以上で入力" required autocomplete="new-password">
         <small class="help-text text-muted">8文字以上で入力してください</small>
     </div>
 
     <div class="field-block">
-        <label for="confirmPassword" class="form-label">パスワード確認</label>
+        <label for="confirmPassword" class="form-label required">パスワード確認</label>
         <% if (errors.confirmPassword) { %>
             <div class="error mb-2">
                 <% errors.confirmPassword.forEach(function(msg) { %>
@@ -59,7 +59,7 @@
                 <% }); %>
             </div> 
         <% } %>
-        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="もう一度入力">
+        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="もう一度入力" autocomplete="new-password" required>
     </div>
 
     <button class="mt-1 d-block w-25   user-button btn btn-dark" type="submit">サインアップ</button>
