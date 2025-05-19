@@ -304,7 +304,7 @@ width: 90px;
 
 
 @media screen and (min-width: 768px) {
-  
+
     .d-contents{
         display: flex;
     }
@@ -388,4 +388,21 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     content: " *";
     color: red;
     margin-left: 0px;
+}
+
+.error-block{
+    width: 95%;
+    padding-left: 1rem;
+}
+@media screen and (min-width: 640px) {
+    .error-block{
+        width: 80%;
+        padding-left: 1rem;
+    }
+}
+@media screen and (min-width: 768px) {
+    .error-block{
+        width: 60%;
+    }
+    
 }
