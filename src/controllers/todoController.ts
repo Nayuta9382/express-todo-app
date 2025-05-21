@@ -4,10 +4,11 @@ import { serialize } from "v8";
 import { ValidationError, validationResult } from "express-validator";
 import { handleValidationErrors } from "../utils/handleValidationErrors";
 import { renderWithSessionClear } from "../utils/renderWithSessionClear";
+import { User } from "../types/user";
 
 // タスク一覧ページを表示
 export const showTodoList = async (req:Request, res:Response, next:NextFunction) =>{
-    const userId = (req.user as any).id; 
+    const userId = (req.user as User).id; 
     
     // 検索したい文字列があるなら取得
     let searchText = '';
@@ -56,7 +57,7 @@ export const insert = async (req:Request, res:Response ,next:NextFunction) =>{
     // POSTデータを取得
     const { title, detail, deadline } = req.body; 
     // userIdを取得
-    const userId = (req.user as any).id; 
+    const userId = (req.user as User).id; 
     // データーべースにデータを追加
     try{
         await addTask(userId,title,detail,deadline);
@@ -164,7 +165,7 @@ export const update = async (req:Request, res:Response, next:NextFunction) =>{
 export const del = async (req:Request, res:Response,next:NextFunction) =>{
     // 削除するidの一覧を取得
     const ids:Array<string>  = req.body.ids;
-    const userId = (req.user as any).id;
+    const userId = (req.user as User).id;
 
     // 送信件数が0件の場合
     if (!req.body.ids || typeof req.body.ids !== 'object' || !Array.isArray(req.body.ids) || req.body.ids.length === 0) {
@@ -212,7 +213,7 @@ export const del = async (req:Request, res:Response,next:NextFunction) =>{
 export const restore = async (req:Request, res:Response,next:NextFunction) =>{
     // 削除するidの一覧を取得
     const ids:Array<string>  = req.body.ids;
-    const userId = (req.user as any).id;
+    const userId = (req.user as User).id;
 
     // 送信件数が0件の場合
     if (!req.body.ids || typeof req.body.ids !== 'object' || !Array.isArray(req.body.ids) || req.body.ids.length === 0) {

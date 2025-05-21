@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { selectTaskById } from '../models/taskModel';
 import passport from 'passport';
+import { User } from '../types/user';
 
 // ログインしていなければログインページにリダイレクトする
 export const ensureAuthenticated =(req: Request, res: Response, next: NextFunction) => {
@@ -20,7 +21,7 @@ export const setUserToLocals = (req: Request, res: Response, next: NextFunction)
 // タスク処理への認可処理用のミドルウェア(表示するタスクがそのユーザの物かどうか)
 export const authorizeTaskOwner  = async (req: Request, res: Response, next: NextFunction) =>{
     // ユーザーidの取得
-    const userId = (req.user as any).id;
+    const userId = (req.user as User).id;
     
     // パスパラメータからタスクidを取得
     const taskId = parseInt(req.params.id);

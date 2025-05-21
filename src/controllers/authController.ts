@@ -8,6 +8,7 @@ import { renderWithSessionClear } from '../utils/renderWithSessionClear';
 import { handleValidationErrors } from '../utils/handleValidationErrors';
 import { validateUpdateUser } from '../validators/updateUserValidator';
 import { ValidationError, validationResult } from 'express-validator';
+import { User } from '../types/user';
 
 // ログインページを表示
 export const showLogin = (req: Request, res: Response,next: NextFunction) => {
@@ -179,7 +180,7 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
 
         // ファイルが送信されている場合保存されているファイル名を取得
         try {
-            const userId = (req.user as any).id;
+            const userId = (req.user as User).id;
             const user = await userSelectById(userId);
             let filePath = user && user.img_path;
 

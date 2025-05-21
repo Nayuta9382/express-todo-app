@@ -1,9 +1,12 @@
-// src/types/express/index.d.ts
+import { User } from "../user";
 
-declare module global {
+// src/types/express/index.d.ts
+declare global {
     namespace Express {
         interface Request {
-            login(user: any, callback: (err?: any) => void): void;
+            login(user: User, done: (err: any) => void): void;
+            logout(callback: (err?: any) => void): void;
+            user?: User; // または User 型を指定しても OK
         }
     }
 }
