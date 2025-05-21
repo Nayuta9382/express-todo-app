@@ -49,7 +49,7 @@ passport.use(new GitHubStrategy({
     const { id, displayName } = profile;
 
     try {
-        let user = await userSelectById(id);
+        let user = await userSelectById(`github_${id}`);
         if (!user) {
             
             await insertUser(`github_${id}`, displayName || 'No name', '');

@@ -1,3 +1,4 @@
+// gitHub認証で使用
 export type User = {
     id: number;              // ユーザーID（自動増分）
     name: string;            // ユーザー名
