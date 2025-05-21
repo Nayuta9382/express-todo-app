@@ -35,6 +35,11 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 // `express-ejs-layouts`を使用する設定
 app.use(expressLayouts); 
+// 静的ファイルの設定
+app.use('/css', express.static(path.join(__dirname, 'public/css')));
+app.use('/favicon.ico', express.static(path.join(__dirname, 'public/favicon.ico')));
+// 静的ディレクトリの設定
+app.use(express.static('public'));
 
 // レイアウトのパスを指定
 app.set('layout', 'layouts/layout'); // レイアウトファイルのパスを指定
@@ -55,7 +60,10 @@ const generalLimiter = rateLimit({
     max: 200,            
     standardHeaders: true, // レスポンスヘッダに制限情報を含める
     legacyHeaders: false, // 古いレート制限ヘッダーを無効化
-    message: 'アクセスが多すぎます。時間をおいてください。',
+    handler: (req, res) => {
+    // 429ステータスでEJSのrate-limitページをレンダリング
+    res.status(429).render('error/rate-limit');
+    }
 });
 
 app.use(generalLimiter);
@@ -82,8 +90,6 @@ app.use(passport.session());
 
 
 
-// 静的ディレクトリの設定
-app.use(express.static('public'));
 // formからデータを受け取る設定
 app.use(express.urlencoded({extended:true}));
 
