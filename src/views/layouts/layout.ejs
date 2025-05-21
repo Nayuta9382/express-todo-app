@@ -9,7 +9,7 @@
   <title><%= typeof title !== 'undefined' ? `Todo-App ${title}` : 'Todo-App' %></title>
 </head>
 <body>
-    <% if (user) { %>
+    <% if (typeof noShowHeader === 'undefined' &&  (typeof customItem === 'undefined' || typeof customItem.noShowHeader === 'undefined')) { %>
     <header class="position-fixed top-0 w-100 d-flex bg-body-tertiary px-2">
         <nav class="navbar navbar-expand-md flex-grow-1 " >
             <div class="container-fluid px-0">

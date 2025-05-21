@@ -12,20 +12,9 @@ import { User } from '../types/user';
 
 // ログインページを表示
 export const showLogin = (req: Request, res: Response,next: NextFunction) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.error(err);
-            const error = new Error() as any;
-            error.status = 500;
-            return next(error);
-        }
-
-        // クッキーに保存されているセッションIDも削除
-        res.clearCookie('connect.sid');
-
-        // もし flash メッセージがあればそれを渡す
-        res.render('login', { error:  null });
-    });
+    // もし flash メッセージがあればそれを渡す
+    res.render('login', { noShowHeader : true,error:  null });
+  
 }
 
 // ログイン処理でエラーがある場合エラーを保持してログインページを表氏
@@ -57,20 +46,26 @@ export const logout = (req: Request, res: Response, next: NextFunction) => {
         }
 
         // セッションの完全な破棄
-        req.session.destroy((err) => {
-            if (err) {
-                console.error(err);
-                const error = new Error() as any;
-                error.status = 500;
-                return next(error);
-            }
+        if (req.session) {
 
-            // セッションIDを保持するクッキーも削除
-            res.clearCookie('connect.sid'); 
-
-            // セッション破棄が完了したら、ログインページにリダイレクト
+            req.session.destroy((err) => {
+                if (err) {
+                    console.error(err);
+                    const error = new Error() as any;
+                    error.status = 500;
+                    return next(error);
+                }
+                
+                // セッションIDを保持するクッキーも削除
+                res.clearCookie('connect.sid'); 
+                
+                // セッション破棄が完了したら、ログインページにリダイレクト
+                res.redirect('/auth/login');
+            });
+        }else{
+            res.clearCookie('connect.sid');
             res.redirect('/auth/login');
-        });
+        }
     });
 };
 
@@ -82,6 +77,7 @@ export const add = (req: Request, res: Response) => {
 	const passwordErrorMessage = req.flash('passwordError');
     
     renderWithSessionClear(req,res,'signup',{ 
+        noShowHeader : true,
 		idError: idErrorMessage.length > 0 ? idErrorMessage[0] : null,
 		passwordError: passwordErrorMessage.length > 0 ? passwordErrorMessage[0] : null
 	});

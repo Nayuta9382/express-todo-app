@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
 // バリデーションエラーメッセージを持ってビューをレンダリングする関数(セッションを破棄する)
-export const renderWithSessionClear = (req: Request,res: Response,viewPath: string ,customItem?:Record<string, string | null | object>) => {
+export const renderWithSessionClear = (req: Request,res: Response,viewPath: string ,customItem?:Record<string, string | null | object | true>) => {
     const errors = req.session?.errors || {};
     const oldInput = req.session?.oldInput || {};
     // ビューをレンダリング

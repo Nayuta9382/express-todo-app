@@ -42,7 +42,7 @@ app.set('layout', 'layouts/layout'); // レイアウトファイルのパスを�
 
 // .envから環境変数を読み込む
 const isProduction = process.env.NODE_ENV === 'production'
-console.log('isProduction', isProduction);
+console.log(isProduction ? '本番環境の設定です' : '開発環境の設定です');
 
 
 app.set('trust proxy', 1);  // 1つのプロキシサーバーを信頼する
