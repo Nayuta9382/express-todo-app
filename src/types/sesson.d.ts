@@ -5,5 +5,6 @@ declare module 'express-session' {
         errors?:  Record<string, string[]>;   // エラーメッセージを格納するためのプロパティ
         oldInput?: object; // フォームデータを格納するためのプロパティ
         userId?:string;
+        fileTypeError?:boolean; 
     }
 }

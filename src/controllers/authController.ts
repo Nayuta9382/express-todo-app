@@ -168,14 +168,17 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
             return res.redirect('/auth/edit');
       
         }
-
-        if (!req.file) {
+        
+        // 無効なファイルなら
+        if (!req.file && req.session.fileTypeError) {
+            delete req.session.fileTypeError;
             req.flash('uploadError', '無効なファイルタイプです。JPEG, PNG, GIF のいずれかの画像をアップロードしてください。');
             return res.redirect('/auth/edit');
         }
         
-
+        
         // セッションの削除
+        delete req.session.fileTypeError;
         delete req.session.oldInput;
 
         // ファイルが送信されている場合保存されているファイル名を取得

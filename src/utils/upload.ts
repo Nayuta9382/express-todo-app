@@ -34,11 +34,13 @@ export const upload = multer({
     limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
     fileFilter: (req, file, cb) => {
         const allowed = ['image/jpeg', 'image/png', 'image/gif'];
+
         if (allowed.includes(file.mimetype)) {
             cb(null, true);
         } else {
-            // cb(new Error('対応していないファイル形式です'));
-             cb(null, false);
+            // コントローラー側で不正なファイルが送信されていることを保持するセッション
+            req.session.fileTypeError = true;
+            cb(null, false);  // PDFも含めて許可していないファイルは拒否
         }
     }
 });
