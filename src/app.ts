@@ -11,6 +11,7 @@ import dotenv from 'dotenv';  // dotenvをインポート
 import authRoutes from './routes/authRoutes';  // 認証ルート
 import flash from 'connect-flash';
 import { ensureAuthenticated, errorHandler, setUserToLocals } from './middlewares/middlewares';
+import rateLimit from 'express-rate-limit';
 import { log } from 'console';
 import crypto from 'crypto';
 
@@ -48,6 +49,16 @@ console.log(isProduction ? '本番環境の設定です' : '開発環境の設�
 app.set('trust proxy', 1);  // 1つのプロキシサーバーを信頼する
 
 
+// Dos対策の設定
+const generalLimiter = rateLimit({
+    windowMs: 60 * 1000, // 1分
+    max: 200,            
+    standardHeaders: true, // レスポンスヘッダに制限情報を含める
+    legacyHeaders: false, // 古いレート制限ヘッダーを無効化
+    message: 'アクセスが多すぎます。時間をおいてください。',
+});
+
+app.use(generalLimiter);
 
 // セッションので設定
 app.use(session({
