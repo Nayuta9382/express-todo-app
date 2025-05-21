@@ -143,10 +143,24 @@ li{
     margin-bottom: 0px;
 }
 
-#profile-img-edit{
+#profile-img-frame{
+    height: 390px;
+}
+
+#profile-img-edit, #img-fluid-dummy{
     display: block;
-    max-height: 300px;
+    width: auto;
+    max-width: 100%;
+    height: 300px;
     object-fit: contain;
+}
+.none{
+    display: none!important;
+}
+#profile-img-icon{
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
 }
 
 .back-button{
@@ -412,3 +426,4 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .color-red{
     color: rgb(234, 57, 57);
 }
+
