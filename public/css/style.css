@@ -156,6 +156,7 @@ li{
 .back-button:hover{
     background-color: #ffffff;
     border: 1px solid #c0c0c5;
+    color: #706f6f;
 }
 .select-btn{
  background-color: #6593ef;
@@ -239,6 +240,7 @@ width: 90px;
 
 .hedding{
     width: 95%;
+    padding-right: 5%!important;
 }
 .field-block{
     width: 85%;
@@ -405,4 +407,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         width: 60%;
     }
     
+}
+
+.color-red{
+    color: rgb(234, 57, 57);
 }

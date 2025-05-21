@@ -32,6 +32,28 @@ export const selectTaskById = async (id:number): Promise<RowDataPacket | null> =
 }
 
 
+// id複数検索によるタスク情報取得
+export const selectTasksByIds = async (ids:number[]): Promise<RowDataPacket[] | null> => {
+    try {
+        const [rows, fields]: [RowDataPacket[], FieldPacket[]] = await db.promise().query(
+        `SELECT * FROM tasks WHERE id IN (${ids.map(() => '?').join(',')})`, 
+        [...ids]
+        );
+        if (rows.length === 0) {
+            return null;  // 検索結果が見つからない場合はnullを返す
+        }	
+        return rows as RowDataPacket[];
+	} catch (err) {
+        console.error(err);
+        const error = new Error() as any;
+        error.status = 500;
+        throw error; 
+	}
+}
+
+
+
+
 // タスクの新規登録
 export const addTask = async (userId:string, title:string, detail:string, deadline:Date) => {
     try {
@@ -58,10 +80,13 @@ export const updateTask = async (id:number, title:string, detail:string, deadlin
     }
 }
 
-// タスクの削除処理
-export const deleteTask = async (id:number) => {
+// タスクの削除処理(複数一括)
+export const deleteTask = async (ids:number[]) => {
     try {
-        await db.promise().query('UPDATE tasks SET del_flg = 1 WHERE id = ?',[id]);
+       await db.promise().query(
+        `UPDATE tasks SET del_flg = 1 WHERE id IN (${ids.map(() => '?').join(',')})`, 
+        [...ids]
+);
 
     } catch (err) {
         console.error(err);
@@ -71,4 +96,35 @@ export const deleteTask = async (id:number) => {
     }
 }
 
+
+// タスクの削除取り消し処理(複数一括)
+export const restoreTask = async (ids:number[]) => {
+    try {
+       await db.promise().query(
+        `UPDATE tasks SET del_flg = 0 WHERE id IN (${ids.map(() => '?').join(',')})`, 
+        [...ids]
+);
+
+    } catch (err) {
+        console.error(err);
+        const error = new Error() as any;
+        error.status = 500;
+        throw error; 
+    }
+}
+
+
+
+// タスクの削除処理(一つ)
+// export const deleteTask = async (id:number) => {
+//     try {
+//         await db.promise().query('UPDATE tasks SET del_flg = 1 WHERE id = ?',[id]);    
+
+//     } catch (err) {
+//         console.error(err);    
+//         const error = new Error() as any;
+//         error.status = 500;
+//         throw error; 
+//     }
+// }
 

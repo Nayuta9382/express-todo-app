@@ -2,10 +2,18 @@
 
 <%- contentFor('body') %>
 <h3 class="hedding mx-auto mt-4"><%= task.title %></h3>
+<% const deadlineDate = new Date(task.deadline); %>
+    <% if (task.delFlg === 1) { %>
+        <p id="red-message" class="color-red field-block mx-auto text-end">このタスクは完了しています</p>
+    <% } else if (deadlineDate < today) { %>
+        <p id="red-message" class="color-red field-block mx-auto text-end">このタスクは期限切れです</p>
+    <% } else if(deadlineDate < oneWeekLater){ %>
+        <p id="red-message" class="color-red field-block mx-auto text-end">このタスクの締切まで残りわずかです</p>
+    <% } %>
 <div class=" mt-4 mx-auto d-flex flex-column align-items-center gap-3  detail">
     <div class="field-block">
         <label class="form-label">詳細</label>
-        <p class="form-control border-0 bg-transparent"><%= task.detail %></p>
+        <p class="form-control border-0 bg-transparent"><%- task.detail %></p>
     </div>
     <div class="field-block">
         <label class="form-label">期限</label>
@@ -20,4 +28,4 @@
         <a class="d-block btn text-white border-0   button bg-bule" href="/task/edit/<%= task.id %>">編集</a>
     </div>
 </div>
-
+<script type="module" src="/js/adjust-text-alignment.js"></script>

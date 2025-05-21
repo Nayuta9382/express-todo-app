@@ -186,6 +186,8 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
             if (req.file) {
                 // 既に保存されているデフォルト画像以外の画像を削除
                 if (user?.img_path && user.img_path.startsWith('/uploads/') && user.img_path !== '/uploads/default-img.png') {
+                    console.log("削除");
+                    
                     deleteFileIfExists(user.img_path);
                 }
                 

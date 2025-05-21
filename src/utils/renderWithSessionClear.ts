@@ -5,13 +5,9 @@ export const renderWithSessionClear = (req: Request,res: Response,viewPath: stri
     const errors = req.session?.errors || {};
     const oldInput = req.session?.oldInput || {};
     // ビューをレンダリング
-    console.log("return前");
     
     if(customItem){
-        console.log("rendaer");
-        
         res.render(viewPath, { errors, oldInput ,customItem});
-        console.log({ errors, oldInput ,customItem});
         
     }else{
         res.render(viewPath, { errors, oldInput });

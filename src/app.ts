@@ -78,9 +78,6 @@ app.use(express.urlencoded({extended:true}));
 
 
 // helmetミドルウェアを使って基本的なセキュリティヘッダーを追加
-
-
-
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -150,8 +147,8 @@ app.use(errorHandler);
 
 const server = http.createServer(app);
 
-// ⏱ 10秒（10000ミリ秒）でタイムアウト
-server.setTimeout(10000); 
+// ⏱ 30秒（30000ミリ秒）でタイムアウト
+server.setTimeout(30000); 
 
 // サーバー起動
 app.listen(3000, () => {

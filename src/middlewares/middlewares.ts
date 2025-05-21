@@ -53,6 +53,7 @@ export const githubAuthMiddleware = () => {
 
 // エラーハンドリングミドルウェア
 export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
+    
     if (err.status === 404) {
         res.status(404).render('error/404', {
             title: err.title || '404 - Page Not Found',
@@ -63,7 +64,13 @@ export const errorHandler = (err: any, req: Request, res: Response, next: NextFu
             title: err.title || '403 - Forbidden',
             error: err.message || 'このページにアクセスする権限がありません。',
         });
+    } else if (err.status === 400) {
+        res.status(400).render('error/400', {
+            title: err.title || '400 Bad Request',
+            error: err.message || '不正な値が入力されました',
+        });
     } else {
+        console.log(`error:500:${err}`);
         res.status(500).render('error/500', {
             title: err.title || '500 - Internal Server Error',
             error: err.message || 'サーバーで予期しないエラーが発生しました。時間をおいて再度お試しください。',

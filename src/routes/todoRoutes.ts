@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { add, del, edit, insert, showDetail, showTodoList, update } from "../controllers/todoController";
+import { add, del, edit, insert, restore, showDetail, showTodoList, update } from "../controllers/todoController";
 import { validateTask } from "../validators/taskValidator";
 import { authorizeTaskOwner } from "../middlewares/middlewares";
 
@@ -21,8 +21,13 @@ router.get('/detail/:id',authorizeTaskOwner ,showDetail);
 router.get('/edit/:id',authorizeTaskOwner ,edit);
 // 更新ページ削除
 router.post('/edit/:id',authorizeTaskOwner,validateTask, update);
-// 削除処理
-router.get('/delete/:id',authorizeTaskOwner, del);
+// 削除処理(一つ)
+// router.get('/delete/:id',authorizeTaskOwner, del);
+// 削除複数
+router.post('/delete', del);
+// 削除取り消し
+router.post('/restore', restore);
+
 
 
 export default router;

@@ -45,16 +45,16 @@ export const upload = multer({
 
 // 古い画像を削除
 export function deleteFileIfExists(relativePath: string): void {
-    const uploadDir = path.join(__dirname, '../../public/uploads');
+    const uploadDir = path.join(__dirname, '../../public/');
     const filePath = path.normalize(path.join(uploadDir, relativePath));
-
+    
     // uploads フォルダ外のパスを拒否（ディレクトリトラバーサル対策）
     if (!filePath.startsWith(uploadDir)) {
         console.warn('不正なファイルパスが指定されました:', filePath);
         return;
     }
 
-    if (fs.existsSync(filePath)) {
+    if (fs.existsSync(filePath)) {        
         fs.unlinkSync(filePath);
     }
 }

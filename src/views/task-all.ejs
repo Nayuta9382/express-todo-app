@@ -22,32 +22,46 @@
             </div>
         </div>
         
-        <div class="scrollbar-wrapper  list-data p-0 m-0 d-flex flex-column gap-2 ">
+        <form action="/task/<%= delFlg === 1 ? 'restore' : 'delete' %>" class="scrollbar-wrapper  list-data p-0 m-0 d-flex flex-column gap-2 " method="post">
             <% if (delFlg === 1) { %>
-                <a class="d-block btn text-white  border-0 text-nowrap mb-1 ms-auto   button bg-red sm-link"  href="#">完了を取り消す</a>
+                <button class="d-block btn text-white  border-0 text-nowrap mb-1 ms-auto   button bg-red sm-link"  type="submit">完了を取り消す</button>
             <% } else { %>
-                <a class="d-block btn text-white  border-0 text-nowrap mb-1 ms-auto   button bg-red sm-link"  href="#">完了</a>
+                <button class="d-block btn text-white  border-0 text-nowrap mb-1 ms-auto   button bg-red sm-link"  type="submit">完了</button>
             <% } %>
-            <ul class="task-ul pl-1<% if (tasks.length > 5) { %>mr-5<% } %> ml-4 d-flex align-items-end  p-0 pb-2 m-0 underline-black">
+            <ul id="task-title" class="task-ul pl-1  ml-4 d-flex align-items-end  p-0 pb-2 m-0 underline-black">
                 <li class="w-4  text-center ">&#10004;</li>
                 <li class="list-title px-2 ">タイトル</li>
-                <li class="list-date px-2   list-date-title "><a class="interactive text-dark text-decoration-none" href="/task?sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&task-status=<%= delFlg === 1 ? 1 : 0 %><%= searchText !== '' ? `&search=${searchText}` : '' %>">期限&nbsp;<img src="/img/arrow-circle-<%= sort === 'asc' ? 'up' : 'down' %>.svg" alt="ソートアイコン"></a></li>
+                <li class="list-date px-2   list-date-title "><a class="interactive d-flex text-dark text-decoration-none" href="/task?sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&task-status=<%= delFlg === 1 ? 1 : 0 %><%= searchText !== '' ? `&search=${searchText}` : '' %>"><span class="d-block">期限&nbsp;</span><img class="d-block" src="/img/arrow-circle-<%= sort === 'asc' ? 'up' : 'down' %>.svg" alt="ソートアイコン"></a></li>
                  <% if (delFlg === 1) { %>
-                    <a class=" d-block btn text-white border-0 text-nowrap  md-link button bg-red comp-button-max"  href="#">完了を取り消す</a>
+                    <button class=" d-block btn text-white border-0 text-nowrap  md-link button bg-red comp-button-max"  type="submit">完了を取り消す</button>
                 <% } else { %>
-                    <a class=" d-block btn text-white border-0 text-nowrap  md-link button bg-red comp-button-min"  href="#">完了</a>
+                    <button class=" d-block btn text-white border-0 text-nowrap  md-link button bg-red comp-button-min"  type="submit">完了</button>
                 <% } %>
             </ul>
-            <div class="tasks scroll-content d-flex flex-column gap-2 ">
+            <div id="task-list-item" class="tasks scroll-content d-flex flex-column gap-2 ">
             <% tasks.forEach(task => { %>
                 <ul class="w-full  d-flex align-items-center p-0 m-0 underline-black pb-2">
-                    <label class="pl-1 d-block d-flex align-items-center pointer"><input class="form-check-input d-block  checkbox-black pointer " type="checkbox" value="" id="flexCheckChecked"></label>
-                    <li class="list-title px-2 "><a class="text-dark interactive" href="/task/detail/<%= task.id %>"><%= task.title %></a></li>
+                    <label class="pl-1 d-block d-flex align-items-center pointer"><input class="form-check-input d-block  checkbox-black pointer " type="checkbox" name="ids[]" value="<%= task.id %>" id="flexCheckChecked"></label>
+                    <li class="list-title px-2  text-truncate">
+                        <% const deadlineDate = new Date(task.deadline); %>
+                        <% if (delFlg !== 1 && deadlineDate < today) { %>
+                        &#9940;
+                        <% } else if(delFlg !== 1 && deadlineDate < oneWeekLater){ %>
+                        &#9888;&#65039;
+                        <% } %>
+                        <a class="text-dark interactive" href="/task/detail/<%= task.id %>"><%= task.title %></a>
+                    </li>
                     <%
                     const dateStr = task.deadline;
                     const date = new Date(dateStr);
                     const formatted = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`; %>
-                    <li class="list-date px-2 "><%= formatted %></li>
+                    <li class="list-date px-2
+                    <% if (delFlg !== 1 && deadlineDate < today) { %>
+                        color-red
+                    <% } %>
+                    ">
+                        <%= formatted %>
+                    </li>
                      <% if (delFlg === 1) { %>
                         <li class="comp-button-max md-link"></li>
                     <% } else { %>
@@ -59,5 +73,4 @@
         </ul>
     </div>
 </div>
-
-
+<script type="module" src="/js/list-add-class.js"></script>
