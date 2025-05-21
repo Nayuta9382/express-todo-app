@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { selectTaskById } from '../models/taskModel';
 import passport from 'passport';
 import { User } from '../types/user';
+import rateLimit from 'express-rate-limit';
 
 // ログインしていなければログインページにリダイレクトする
 export const ensureAuthenticated =(req: Request, res: Response, next: NextFunction) => {
@@ -43,6 +44,23 @@ export const authorizeTaskOwner  = async (req: Request, res: Response, next: Nex
     next();
 
 }
+
+
+// ブルートフォース攻撃用のミドルウェア
+export const loginLimiter = (
+) => {
+    return rateLimit({
+        windowMs: 5 * 60 * 1000, // 5分
+        max: 5, // 5回まで
+        standardHeaders: true,
+        legacyHeaders: false,
+        handler: (req: Request, res: Response) => {
+            req.flash('error', 'ログイン試行が多すぎます。しばらくしてから再試行してください。');
+            res.redirect('/auth/login');
+
+        }
+    });
+};
 
 // GitHub認証用のミドルウェア関数(コールバック関数で利用)
 export const githubAuthMiddleware = () => {

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { add, edit, gitHubCallback, insert, login, logout,  showLogin, showLoginWithError, update } from "../controllers/authController";
-import { ensureAuthenticated, githubAuthMiddleware } from "../middlewares/middlewares";
+import { ensureAuthenticated, githubAuthMiddleware, loginLimiter } from "../middlewares/middlewares";
 import { validateSignup } from "../validators/signupValidator";
 import { validateUpdateUser } from "../validators/updateUserValidator";
 import { upload } from "../utils/upload";
@@ -12,7 +12,7 @@ const router = Router();
 router.get('/login',showLogin);
 // ログイン失敗時にエラーを保持してログインページを表示
 router.get('/login-error',showLoginWithError);
-router.post('/login',login);
+router.post('/login',loginLimiter(),login);
 
 
 // ログアウト処理

@@ -13,7 +13,12 @@ import { User } from '../types/user';
 // ログインページを表示
 export const showLogin = (req: Request, res: Response,next: NextFunction) => {
     // もし flash メッセージがあればそれを渡す
-    res.render('login', { noShowHeader : true,error:  null });
+    const errorMessage = req.flash('error');
+    if(errorMessage.length > 0){
+        res.render('login', {noShowHeader : true, error: errorMessage[0] });
+    }else{
+        res.render('login', { noShowHeader : true,error:  null });
+    }
   
 }
 
@@ -21,7 +26,7 @@ export const showLogin = (req: Request, res: Response,next: NextFunction) => {
 export const showLoginWithError = (req: Request, res: Response,next: NextFunction) => {
     const errorMessage = req.flash('error');
     if(errorMessage.length > 0){
-        res.render('login', { error: errorMessage[0] });
+        res.render('login', {noShowHeader : true, error: errorMessage[0] });
     }else{
         res.redirect('/auth/login');
     }
