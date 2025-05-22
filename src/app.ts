@@ -103,7 +103,7 @@ app.use(
         scriptSrc: ["'self'", "https://cdn.jsdelivr.net"],  // CDNドメインを追加
         styleSrc: ["'self'", "https://cdn.jsdelivr.net"],   // CDNドメインを追加
         fontSrc: ["'self'", "https://cdn.jsdelivr.net"],    // フォント読み込み用に追加
-        imgSrc: ["'self'", "data:"],                        // 画像でdata URIも許可（Bootstrapのアイコンなど）
+        imgSrc: ["'self'", "data:","https://avatars.githubusercontent.com"], // ← GitHubのアバター画像用に追加],                        // 画像でdata URIも許可（Bootstrapのアイコンなど）
         objectSrc: ["'none'"],
         baseUri: ["'self'"],
         frameAncestors: ["'self'"],

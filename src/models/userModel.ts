@@ -17,9 +17,16 @@ export const userSelectById = async (id:string):  Promise<RowDataPacket | null> 
 };
 
 // ユーザ情報の新規登録
-export const insertUser = async (id:string,name:string,password:string) => {
+export const insertUser = async (id:string,name:string,password:string,imgPath?:string) => {
 	try {
-		await db.promise().query('INSERT INTO users(id, name, password) VALUES(?, ?, ?)', [id, name, password]);
+        let sql = ''
+        if(imgPath){
+            sql = 'INSERT INTO users(id, name, password,img_path) VALUES(?, ?, ?, ?)'
+            await db.promise().query(sql, [id, name, password,imgPath]);
+        }else{
+            sql = 'INSERT INTO users(id, name, password) VALUES(?, ?, ?)'
+            await db.promise().query(sql, [id, name, password]);
+        }
 	} catch (err) {
         console.error(err);
         const error = new Error() as any;

@@ -3,9 +3,10 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import { insertUser, userSelectById } from './models/userModel';
 import { Strategy as GitHubStrategy } from 'passport-github2';
 import { VerifyCallback } from 'passport-oauth2';
-
+import fs from 'fs';
 import bcrypt from 'bcrypt';
 import { Request } from 'express';
+import path from 'path';
 
 // ローカル戦略の設定
 passport.use(new LocalStrategy(
@@ -47,12 +48,14 @@ passport.use(new GitHubStrategy({
     passReqToCallback: true,
 }, async (req: Request, accessToken: string, refreshToken: string, profile: Profile, done: VerifyCallback) => {
     const { id, displayName } = profile;
+    const githubAvatar = profile.photos?.[0]?.value || '/uploads/default-img.png';
+
 
     try {
         let user = await userSelectById(`github_${id}`);
         if (!user) {
             
-            await insertUser(`github_${id}`, displayName || 'No name', '');
+            await insertUser(`github_${id}`, displayName || 'No name', '',githubAvatar);
             user = await userSelectById(`github_${id}`);
         }
 
@@ -76,6 +79,23 @@ passport.deserializeUser(async (id: string, done) => {
 
         if (!user) {
             return done(null, false);  // ユーザーが見つからなかった場合
+        }
+        // gitHubアカウントならならそのまま使う
+        if (user.img_path.startsWith('http://') || user.img_path.startsWith('https://')) {
+            return done(null, user);
+        }
+
+        // ローカルに画像がない場合デフォルト画像を表示
+        const safeFilename = path.basename(user.img_path || '');
+        const uploadDir = path.join(__dirname, '../public/uploads/');
+        const profileImagePath = path.join(uploadDir, safeFilename);
+        console.log(profileImagePath);
+        
+        
+        try {
+            await fs.promises.access(profileImagePath, fs.constants.F_OK);
+        } catch {
+            user.img_path = '/uploads/default-img.png';
         }
 
         done(null, user);  // ユーザー情報を復元

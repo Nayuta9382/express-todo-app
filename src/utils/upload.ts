@@ -46,9 +46,11 @@ export const upload = multer({
 });
 
 // 古い画像を削除
-export function deleteFileIfExists(relativePath: string): void {
+export async function deleteFileIfExists(relativePath: string): Promise<void>  {
     const uploadDir = path.join(__dirname, '../../public/');
     const filePath = path.normalize(path.join(uploadDir, relativePath));
+    console.log(filePath);
+    
     
     // uploads フォルダ外のパスを拒否（ディレクトリトラバーサル対策）
     if (!filePath.startsWith(uploadDir)) {
@@ -56,8 +58,13 @@ export function deleteFileIfExists(relativePath: string): void {
         return;
     }
 
-    if (fs.existsSync(filePath)) {        
-        fs.unlinkSync(filePath);
+     try {
+        await fs.promises.access(filePath, fs.constants.F_OK);
+        await fs.promises.unlink(filePath);
+    } catch (err) {
+        // ファイルが存在しない場合やその他のエラーは無視
+        console.log(err);
+        
     }
 }
 // 画像名を返す
