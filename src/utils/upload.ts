@@ -49,8 +49,6 @@ export const upload = multer({
 export async function deleteFileIfExists(relativePath: string): Promise<void>  {
     const uploadDir = path.join(__dirname, '../../public/');
     const filePath = path.normalize(path.join(uploadDir, relativePath));
-    console.log(filePath);
-    
     
     // uploads フォルダ外のパスを拒否（ディレクトリトラバーサル対策）
     if (!filePath.startsWith(uploadDir)) {

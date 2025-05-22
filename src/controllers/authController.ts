@@ -34,12 +34,32 @@ export const showLoginWithError = (req: Request, res: Response,next: NextFunctio
 }
 // ログイン処理を行う
 export const login = (req: Request, res: Response, next: NextFunction) => {
-	passport.authenticate('local', {
-		successRedirect: '/task',         // ログイン成功時にリダイレクト
-		failureRedirect: '/auth/login-error',   // ログイン失敗時にリダイレクト
-		failureFlash: 'idとパスワードが一致しません',               // 失敗時にflashメッセージを表示
-	})(req, res, next);  // Passport の認証処理を実行
+    passport.authenticate('local', (err:any, user:User, info:any) => {
+        if (err) {
+            return next(err);
+        }
+
+        if (!user) {
+            // 認証失敗時に flash メッセージをセット
+            req.flash('error', 'idとパスワードが一致しません');
+            return res.redirect('/auth/login-error');
+        }
+
+        // 認証成功時にセッションIDを再生成
+        req.session.regenerate((err) => {
+            if (err) {
+                return next(err);
+            }
+            req.login(user, (err) => {
+                if (err) {
+                    return next(err);
+                }
+                return res.redirect('/task');
+            });
+        });
+    })(req, res, next);
 };
+
 // ログアウト処理
 export const logout = (req: Request, res: Response, next: NextFunction) => {
     req.logout((err) => {
@@ -211,17 +231,46 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
     });
 };
 
-// github認証のコールバック関数
-export const gitHubCallback = 
-  (req: Request, res: Response,next:NextFunction) => {
-    // リダイレクト前にセッションの保存を確実に行う
-    req.session.save((err) => {
-      if (err) {
-            console.error(err);
-            const error = new Error() as any;
-            error.status = 500;
-            return next(error);      }
-      // ログイン成功後、ダッシュボードなどにリダイレクト
-      res.redirect('/task');
-    });
+
+
+// GitHub認証のコールバック関数
+export const gitHubCallback = (req: Request, res: Response, next: NextFunction) => {
+  const user = req.user;
+
+  if (!user) {
+    return res.redirect('/auth/login'); // ユーザーが取得できなかった場合
   }
+
+  // セッションIDの再生成（セッション固定攻撃対策）
+  req.session.regenerate((err) => {
+    if (err) {
+      console.error(err);
+      const error = new Error() as any;
+      error.status = 500;
+      return next(error);
+    }
+
+    // パスポートにログイン情報を保存
+    req.login(user, (err) => {
+      if (err) {
+        console.error(err);
+        const error = new Error() as any;
+        error.status = 500;
+        return next(error);
+      }
+
+      // セッションの保存
+      req.session.save((err) => {
+        if (err) {
+          console.error(err);
+          const error = new Error() as any;
+          error.status = 500;
+          return next(error);
+        }
+
+        res.redirect('/task');
+      });
+    });
+  });
+};
+

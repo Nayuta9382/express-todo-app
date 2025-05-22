@@ -89,7 +89,6 @@ passport.deserializeUser(async (id: string, done) => {
         const safeFilename = path.basename(user.img_path || '');
         const uploadDir = path.join(__dirname, '../public/uploads/');
         const profileImagePath = path.join(uploadDir, safeFilename);
-        console.log(profileImagePath);
         
         
         try {
