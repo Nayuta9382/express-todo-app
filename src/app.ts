@@ -12,6 +12,7 @@ import authRoutes from './routes/authRoutes';  // 認証ルート
 import flash from 'connect-flash';
 import { ensureAuthenticated, errorHandler, setUserToLocals } from './middlewares/middlewares';
 import rateLimit from 'express-rate-limit';
+import csrf from 'csurf';
 import { log } from 'console';
 import crypto from 'crypto';
 
@@ -93,6 +94,10 @@ app.use(passport.session());
 // formからデータを受け取る設定
 app.use(express.urlencoded({extended:true}));
 
+
+// CSRFミドルウェアの使用
+const csrfProtection = csrf();
+app.use(csrfProtection);
 
 // helmetミドルウェアを使って基本的なセキュリティヘッダーを追加
 app.use(

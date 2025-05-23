@@ -37,7 +37,7 @@ export const showTodoList = async (req:Request, res:Response, next:NextFunction)
     
     try {
         const tasks = await getTaskAll(userId,searchText,sort,delFlg);
-        res.render('task-all', { tasks, searchText, sort, delFlg, today, oneWeekLater }); 
+        res.render('task-all', { tasks, searchText, sort, delFlg, today, oneWeekLater , csrfToken: req.csrfToken()}); 
 	} catch (e) {
         const error = new Error() as any;
         error.status = 500;
@@ -46,7 +46,7 @@ export const showTodoList = async (req:Request, res:Response, next:NextFunction)
 }
 // 新規追加ページを表示
 export const add =  (req:Request, res:Response ) =>{
-    renderWithSessionClear(req,res,'task-new');
+    renderWithSessionClear(req,res,'task-new',{ csrfToken: req.csrfToken()});
 }
 // 新規登録処理
 export const insert = async (req:Request, res:Response ,next:NextFunction) =>{
@@ -123,7 +123,7 @@ export const edit = async (req:Request, res:Response, next:NextFunction) =>{
             error.title = '404 - Task Not Found';
             return next(error);
         }
-        renderWithSessionClear(req,res,`task-edit`,{task});
+        renderWithSessionClear(req,res,`task-edit`,{task, csrfToken: req.csrfToken()});
     } catch (err) {
             console.error(err);
             const error = new Error() as any;

@@ -15,9 +15,9 @@ export const showLogin = (req: Request, res: Response,next: NextFunction) => {
     // もし flash メッセージがあればそれを渡す
     const errorMessage = req.flash('error');
     if(errorMessage.length > 0){
-        res.render('login', {noShowHeader : true, error: errorMessage[0] });
+        res.render('login', {noShowHeader : true, error: errorMessage[0],  csrfToken: req.csrfToken() });
     }else{
-        res.render('login', { noShowHeader : true,error:  null });
+        res.render('login', { noShowHeader : true,error:  null , csrfToken: req.csrfToken()});
     }
   
 }
@@ -26,7 +26,7 @@ export const showLogin = (req: Request, res: Response,next: NextFunction) => {
 export const showLoginWithError = (req: Request, res: Response,next: NextFunction) => {
     const errorMessage = req.flash('error');
     if(errorMessage.length > 0){
-        res.render('login', {noShowHeader : true, error: errorMessage[0] });
+        res.render('login', {noShowHeader : true, error: errorMessage[0] , csrfToken: req.csrfToken() });
     }else{
         res.redirect('/auth/login');
     }
@@ -104,7 +104,8 @@ export const add = (req: Request, res: Response) => {
     renderWithSessionClear(req,res,'signup',{ 
         noShowHeader : true,
 		idError: idErrorMessage.length > 0 ? idErrorMessage[0] : null,
-		passwordError: passwordErrorMessage.length > 0 ? passwordErrorMessage[0] : null
+		passwordError: passwordErrorMessage.length > 0 ? passwordErrorMessage[0] : null,
+        csrfToken: req.csrfToken()
 	});
 
 }
@@ -152,6 +153,7 @@ export const edit =  async (req: Request, res: Response, next: NextFunction) =>{
     // setUserToLocalsでuser情報を渡されるためuser情報は渡さない
      renderWithSessionClear(req,res,'user-edit',{ 
 		uploadError: uploadError.length > 0 ? uploadError[0] : null,
+        csrfToken: req.csrfToken()
 	});
 
 }

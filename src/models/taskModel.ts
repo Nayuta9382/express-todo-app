@@ -31,7 +31,6 @@ export const selectTaskById = async (id:number): Promise<RowDataPacket | null> =
 	}
 }
 
-
 // id複数検索によるタスク情報取得
 export const selectTasksByIds = async (ids:number[]): Promise<RowDataPacket[] | null> => {
     try {

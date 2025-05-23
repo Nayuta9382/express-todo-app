@@ -3,6 +3,7 @@
 <%- contentFor('body') %>
 <h3 class="hedding mx-auto">サインアップ</h3>
 <form action="/auth/signup" method="post" class="mt-4 mx-auto d-flex flex-column align-items-center gap-3">
+    <input type="hidden" name="_csrf" value="<%= customItem.csrfToken %>">
     <div class="field-block">
         <label for="id" class="form-label required">ID</label>
         <% if (customItem.idError) { %>
