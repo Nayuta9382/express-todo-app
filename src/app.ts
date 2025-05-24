@@ -95,9 +95,6 @@ app.use(passport.session());
 app.use(express.urlencoded({extended:true}));
 
 
-// CSRFミドルウェアの使用
-const csrfProtection = csrf();
-app.use(csrfProtection);
 
 // helmetミドルウェアを使って基本的なセキュリティヘッダーを追加
 app.use(

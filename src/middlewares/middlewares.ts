@@ -73,22 +73,35 @@ export const githubAuthMiddleware = () => {
 // エラーハンドリングミドルウェア
 export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
     
+    // CSRFトークンエラー専用処理
+    if (err.code === 'EBADCSRFTOKEN') {
+        console.log("CSRF token error");
+        return res.status(403).render('error/403', {
+            title: '403 - 不正なリクエスト',
+            error: 'フォームの有効期限が切れているか、不正な操作が検出されました。もう一度お試しください。',
+        });
+    }
+
     if (err.status === 404) {
+        console.log("error404");
         res.status(404).render('error/404', {
             title: err.title || '404 - Page Not Found',
             error: err.message || 'お探しのページは存在しないか、移動された可能性があります。',
         });
     } else if (err.status === 403) {
+        console.log("error403");
         res.status(403).render('error/403', {
             title: err.title || '403 - Forbidden',
             error: err.message || 'このページにアクセスする権限がありません。',
         });
     } else if (err.status === 400) {
+        console.log("error400");
         res.status(400).render('error/400', {
             title: err.title || '400 Bad Request',
             error: err.message || '不正な値が入力されました',
         });
     } else {
+        console.log("error500");
         console.log(`error:500:${err}`);
         res.status(500).render('error/500', {
             title: err.title || '500 - Internal Server Error',

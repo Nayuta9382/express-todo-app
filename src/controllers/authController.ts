@@ -9,6 +9,12 @@ import { handleValidationErrors } from '../utils/handleValidationErrors';
 import { validateUpdateUser } from '../validators/updateUserValidator';
 import { ValidationError, validationResult } from 'express-validator';
 import { User } from '../types/user';
+import csrf from 'csurf';
+
+
+const csrfProtection = csrf();
+
+
 
 // ログインページを表示
 export const showLogin = (req: Request, res: Response,next: NextFunction) => {
@@ -199,37 +205,52 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
             return res.redirect('/auth/edit');
         }
         
-        
-        // セッションの削除
-        delete req.session.fileTypeError;
-        delete req.session.oldInput;
-
-        // ファイルが送信されている場合保存されているファイル名を取得
-        try {
-            const userId = (req.user as User).id;
-            const user = await userSelectById(userId);
-            let filePath = user && user.img_path;
-
-            if (req.file) {
-                // 既に保存されているデフォルト画像以外の画像を削除
-                if (user?.img_path && user.img_path.startsWith('/uploads/') && user.img_path !== '/uploads/default-img.png') {
-                    await deleteFileIfExists(user.img_path);
+         // csrfの検証で検証
+        csrfProtection(req, res, async (err:any) => {
+            if (err) {
+                if (err.code === 'EBADCSRFTOKEN') {
+                    console.log("CSRF token error");
+                    return res.status(403).render('error/403', {
+                        title: '403 - 不正なリクエスト',
+                        error: 'フォームの有効期限が切れているか、不正な操作が検出されました。もう一度お試しください。',
+                    });
+                } else {
+                    // その他のエラー（CSRF以外）
+                    return next(err);
                 }
-                
-                filePath = `/uploads/${req.file.filename}`;
             }
 
-            // データベースへの保存処理
-            const { name } = req.body; // POSTデータを取得
+                // セッションの削除
+            delete req.session.fileTypeError;
+            delete req.session.oldInput;
 
-            await updateUser(userId, name, filePath);
-            return res.redirect('/task');
-        } catch (err) {
-            console.error(err);
-            const error = new Error() as any;
-            error.status = 500;
-            return next(error);
-        }
+            // ファイルが送信されている場合保存されているファイル名を取得
+            try {
+                const userId = (req.user as User).id;
+                const user =     await userSelectById(userId);
+                let filePath = user && user.img_path;
+
+                if (req.file) {
+                    // 既に保存されているデフォルト画像以外の画像を削除
+                    if (user?.img_path && user.img_path.startsWith('/uploads/') && user.img_path !== '/uploads/default-img.png') {
+                        await deleteFileIfExists(user.img_path);
+                    }
+                    
+                    filePath = `/uploads/${req.file.filename}`;
+                }
+
+                // データベースへの保存処理
+                const { name } = req.body; // POSTデータを取得
+
+                await updateUser(userId, name, filePath);
+                return res.redirect('/task');
+            } catch (err) {
+                console.error(err);
+                const error = new Error() as any;
+                error.status = 500;
+                return next(error);
+            }
+        });
     });
 };
 

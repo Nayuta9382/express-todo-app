@@ -6,24 +6,27 @@ import { validateUpdateUser } from "../validators/updateUserValidator";
 import { upload } from "../utils/upload";
 import passport from "passport";
 import { userSelectById } from "../models/userModel";
+import csrf from "csurf";
 const router = Router();
+const csrfProtection = csrf();
 
 // ログイン処理
-router.get('/login',showLogin);
+router.get('/login',csrfProtection,showLogin);
 // ログイン失敗時にエラーを保持してログインページを表示
-router.get('/login-error',showLoginWithError);
-router.post('/login',loginLimiter(),login);
+router.get('/login-error',csrfProtection,showLoginWithError);
+router.post('/login',csrfProtection,loginLimiter(),login);
 
 
 // ログアウト処理
 router.get('/logout',logout);
 
 // 新規登録処理
-router.get('/signup', add);
-router.post('/signup',validateSignup, insert);
+router.get('/signup', csrfProtection,add);
+router.post('/signup',csrfProtection,validateSignup, insert);
 
 // アカウント情報変更
-router.get('/edit', ensureAuthenticated,edit);
+router.get('/edit',csrfProtection, ensureAuthenticated,edit);
+// バリデーション・csrfはコントローラー内で検証
 router.post('/edit',ensureAuthenticated, update);
 
 

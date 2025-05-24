@@ -3,7 +3,7 @@
 <%- contentFor('body') %>
 <h3 class="hedding mx-auto mt-4">タスク作成</h3>
 <form action="/task/new" method="post" id="form" class="mt-4 mx-auto d-flex flex-column align-items-center gap-3">
-    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <input type="hidden" name="_csrf" value="<%= customItem.csrfToken %>">
     <div class="field-block">
         <label for="title" class="form-label required">タイトル</label>
         <% if (errors.title) { %>

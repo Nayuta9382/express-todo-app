@@ -12,8 +12,7 @@ const db: Pool = mysql.createPool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     queueLimit: 0,
-    // connectionLimit: 10, 
-    connectionLimit: 5, 
+    connectionLimit: 4, 
     waitForConnections: true
 });
 // 接続関数を明示的に呼び出す用に定義
