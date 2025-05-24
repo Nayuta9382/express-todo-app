@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import { addTask, deleteTask, getTaskAll, restoreTask, selectTaskById, selectTasksByIds, updateTask } from '../models/taskModel';
-import { serialize } from "v8";
-import { ValidationError, validationResult } from "express-validator";
 import { handleValidationErrors } from "../utils/handleValidationErrors";
 import { renderWithSessionClear } from "../utils/renderWithSessionClear";
 import { User } from "../types/user";

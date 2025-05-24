@@ -7,7 +7,6 @@ import { deleteFileIfExists, upload } from '../utils/upload';
 import { renderWithSessionClear } from '../utils/renderWithSessionClear';
 import { handleValidationErrors } from '../utils/handleValidationErrors';
 import { validateUpdateUser } from '../validators/updateUserValidator';
-import { ValidationError, validationResult } from 'express-validator';
 import { User } from '../types/user';
 import csrf from 'csurf';
 

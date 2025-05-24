@@ -1,5 +1,5 @@
-import express, { Request, Response, NextFunction } from 'express';
-import http, { IncomingMessage } from 'http';
+import express from 'express';
+import http from 'http';
 import todoRoutes from './routes/todoRoutes';
 import expressLayouts from 'express-ejs-layouts';
 import path from 'path';
@@ -12,11 +12,7 @@ import authRoutes from './routes/authRoutes';  // 認証ルート
 import flash from 'connect-flash';
 import { ensureAuthenticated, errorHandler, setUserToLocals } from './middlewares/middlewares';
 import rateLimit from 'express-rate-limit';
-import csrf from 'csurf';
-import { log } from 'console';
-import crypto from 'crypto';
 
-// import './gitHub'; 
 
 
 const port = 3000;
@@ -78,7 +74,6 @@ app.use(session({
         maxAge: 1000 * 60 * 60 * 2, // セッションの有効期限（例：2時間）
         secure: isProduction,       // 本番環境では secure: true に設定（HTTPSを強制）
         httpOnly: true,             // クライアントサイドのJavaScriptからアクセスできないように
-        // sameSite: 'strict'          // クロスサイトリクエストでのCookie送信を制限
         sameSite: 'lax' // 'strict'から'lax'に変更することでリダイレクト時のCookie送信を許可
       }
 }));
@@ -170,6 +165,10 @@ const server = http.createServer(app);
 server.setTimeout(30000); 
 
 // サーバー起動
-app.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
+const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || 'localhost';
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://${HOST}:${PORT}`);
+  console.log(`Server is running on https://${HOST}:${PORT}`);
 });

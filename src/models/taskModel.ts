@@ -111,19 +111,3 @@ export const restoreTask = async (ids:number[]) => {
         throw error; 
     }
 }
-
-
-
-// タスクの削除処理(一つ)
-// export const deleteTask = async (id:number) => {
-//     try {
-//         await db.promise().query('UPDATE tasks SET del_flg = 1 WHERE id = ?',[id]);    
-
-//     } catch (err) {
-//         console.error(err);    
-//         const error = new Error() as any;
-//         error.status = 500;
-//         throw error; 
-//     }
-// }
-

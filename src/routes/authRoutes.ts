@@ -1,11 +1,8 @@
-import { NextFunction, Request, Response, Router } from "express";
+import { Router } from "express";
 import { add, edit, gitHubCallback, insert, login, logout,  showLogin, showLoginWithError, update } from "../controllers/authController";
 import { ensureAuthenticated, githubAuthMiddleware, loginLimiter } from "../middlewares/middlewares";
 import { validateSignup } from "../validators/signupValidator";
-import { validateUpdateUser } from "../validators/updateUserValidator";
-import { upload } from "../utils/upload";
 import passport from "passport";
-import { userSelectById } from "../models/userModel";
 import csrf from "csurf";
 const router = Router();
 const csrfProtection = csrf();

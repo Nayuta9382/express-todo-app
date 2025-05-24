@@ -56,8 +56,6 @@ footer{
     height: 28px;
 }
 
-
-
 .d-contents{
     display:flex
 }
@@ -72,15 +70,14 @@ footer{
     background-color: #f65c5a!important;
 }
 
-.bg-bule{
-    /* background-color: #80A4ED; */
+.bg-blue{
     background-color: #6593ef;
 }
-.bg-bule:hover{
+.bg-blue:hover{
     background-color: rgba(98, 145, 240, 0.8);
 }
-.bg-bule:active{
- background-color: #6593ef!important;
+.bg-blue:active{
+    background-color: #6593ef!important;
 }
 .w-4{
     width: 1rem;
@@ -103,9 +100,7 @@ footer{
     height: auto;
 }
 
-/* .list-data li,span{
-    height: 28px;
-} */
+
 .checkbox-black {
     border: 1px solid #b5b2b2;
     margin-top: 0px ;
@@ -173,16 +168,16 @@ li{
     color: #706f6f;
 }
 .select-btn{
- background-color: #6593ef;
-width: 90px;
+    background-color: #6593ef;
+    width: 90px;
 
 }
 .select-btn:hover{
     background-color: rgba(98, 145, 240, 0.8);
 }
 .select-btn:active{
- background-color: #6593ef!important;
- border-color: #6593ef!important;
+    background-color: #6593ef!important;
+    border-color: #6593ef!important;
 }
 .select-btn-no{
     border: 2px solid #6593ef;
@@ -361,7 +356,6 @@ width: 90px;
     overflow: visible; /* スクロールバーを外に出す準備 */
 }
 .scroll-content {
-     /* box-sizing: content-box;    */
     max-height: 200px;
     box-sizing: content-box;
     width: 100%;
