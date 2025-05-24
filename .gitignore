@@ -25,6 +25,7 @@ build/
 *.swp              # vimのスワップファイル
 *.sql
 task.txt
+.vscode/
 
 # public/uploads以下のすべてを無視
 /public/uploads/*
