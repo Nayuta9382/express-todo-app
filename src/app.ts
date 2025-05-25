@@ -161,8 +161,8 @@ app.use(errorHandler);
 
 const server = http.createServer(app);
 
-// ⏱ 30秒（30000ミリ秒）でタイムアウト
-server.setTimeout(30000); 
+// ⏱ 60秒（60000ミリ秒）でタイムアウト
+server.setTimeout(60000); 
 
 // サーバー起動
 const PORT = process.env.PORT || 3000;
