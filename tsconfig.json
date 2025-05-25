@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "CommonJS",
+    "target": "es6",
+    "module": "commonjs",
     "rootDir": "./src",
     "outDir": "./dist/src",
     "esModuleInterop": true,
@@ -9,7 +9,9 @@
     "typeRoots": [
       "./node_modules/@types",
       "./src/types"
-    ]
+    ],
+    "skipLibCheck": true,
+    "types": ["node", "express"]
   },
   "include": ["src/**/*"]
 }
