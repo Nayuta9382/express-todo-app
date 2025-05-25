@@ -1,29 +1,28 @@
-import mysql, { Pool } from 'mysql2';
+import { Pool } from 'pg';
 import dotenv from 'dotenv';  // dotenvをインポート
-import { PoolConnection } from 'mysql2/typings/mysql/lib/PoolConnection';
 
 // .envを読み込む
 dotenv.config();
 
 
-const db: Pool = mysql.createPool({
+const db: Pool = new Pool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    queueLimit: 0,
-    connectionLimit: 4, 
-    waitForConnections: true
+    port: Number(process.env.DB_PORT),
+    max: 10,
+    idleTimeoutMillis: 30000 // 30秒接続なして遮断
 });
 // 接続関数を明示的に呼び出す用に定義
-export const connectDB = () => {
- db.getConnection((err: any | null, connection: PoolConnection) => {
-        if (err) {
-        console.error('MySQLへの接続に失敗しました: ', err);
-        return;
-        }
-        console.log('MySQLに接続しました');
-    });
+export const connectDB = async () => {
+    try {
+        const client = await db.connect();
+        console.log('PostgreSQL に接続しました');
+        client.release(); // 必ず解放
+    } catch (err) {
+        console.error('PostgreSQL への接続に失敗しました: ', err);
+    }
 };
 
 export default db;

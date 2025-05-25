@@ -101,7 +101,7 @@ export const showDetail = async (req:Request, res:Response, next:NextFunction) =
     
         // 改行コードを<br>に変換
         task.detail = escaped.replace(/\r?\n/g, '<br>');
-        
+        task.del_flg = task.del_flg ? 1 : 0;
         res.render('task-detail',{task, today, oneWeekLater}); 
     } catch (err) {
             console.error(err);

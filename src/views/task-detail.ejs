@@ -3,7 +3,7 @@
 <%- contentFor('body') %>
 <h3 class="hedding mx-auto mt-4"><%= task.title %></h3>
 <% const deadlineDate = new Date(task.deadline); %>
-    <% if (task.delFlg === 1) { %>
+    <% if (task.del_flg === 1) { %>
         <p id="red-message" class="color-red field-block mx-auto text-end">このタスクは完了しています</p>
     <% } else if (deadlineDate < today) { %>
         <p id="red-message" class="color-red field-block mx-auto text-end">このタスクは期限切れです</p>
