@@ -6,6 +6,7 @@ node_modules/
 
 # 環境設定ファイル
 .env
+.env-local
 
 # デバッグ用ファイル
 npm-debug.log*
