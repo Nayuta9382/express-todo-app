@@ -4,7 +4,6 @@ import dotenv from 'dotenv';  // dotenvをインポート
 // .envを読み込む
 dotenv.config();
 
-
 const db: Pool = new Pool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -12,7 +11,10 @@ const db: Pool = new Pool({
     database: process.env.DB_NAME,
     port: Number(process.env.DB_PORT),
     max: 15,
-    idleTimeoutMillis: 30000 // 30秒接続なして遮断
+    idleTimeoutMillis: 30000, // 30秒接続なして遮断
+    ssl: {
+        rejectUnauthorized: false 
+    }
 });
 // 接続関数を明示的に呼び出す用に定義
 export const connectDB = async () => {
