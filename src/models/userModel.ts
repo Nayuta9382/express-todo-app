@@ -1,7 +1,8 @@
 import db from '../db'; // DB接続をインポート
+import { User } from '../types/user';
 
 // ユーザidの検索
-export const userSelectById = async (id: string): Promise<any | null> => {
+export const userSelectById = async (id: string): Promise<User | null> => {
     try {
         const result = await db.query('SELECT * FROM users WHERE id = $1', [id]);
         if (result.rows.length === 0) {
@@ -34,7 +35,7 @@ export const insertUser = async (id: string, name: string, password: string, img
 };
 
 // ユーザ情報更新
-export const updateUser = async (id: string, name: string, imgPath: string) => {
+export const updateUser = async (id: string, name: string, imgPath: string | null) => {
     try {
         await db.query('UPDATE users SET name = $1, img_path = COALESCE($2, img_path) WHERE id = $3', [name, imgPath, id]);
     } catch (err) {

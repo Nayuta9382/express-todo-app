@@ -11,7 +11,7 @@ const db: Pool = new Pool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     port: Number(process.env.DB_PORT),
-    max: 10,
+    max: 15,
     idleTimeoutMillis: 30000 // 30秒接続なして遮断
 });
 // 接続関数を明示的に呼び出す用に定義

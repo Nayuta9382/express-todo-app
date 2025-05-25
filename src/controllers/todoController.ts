@@ -3,6 +3,7 @@ import { addTask, deleteTask, getTaskAll, restoreTask, selectTaskById, selectTas
 import { handleValidationErrors } from "../utils/handleValidationErrors";
 import { renderWithSessionClear } from "../utils/renderWithSessionClear";
 import { User } from "../types/user";
+import { parseTaskQuery } from "../utils/parseTaskQuery";
 
 
 
@@ -11,21 +12,8 @@ export const showTodoList = async (req:Request, res:Response, next:NextFunction)
     const userId = (req.user as User).id; 
     
     // 検索したい文字列があるなら取得
-    let searchText = '';
-    if (req.query && req.query['search'] !== undefined && typeof req.query['search'] === 'string') {
-        searchText = req.query['search'];
-    }
-    
-    // 期限の昇順・降順を取得(デフォルトは昇順)
-    let sort = 'asc';
-    if (req.query && req.query['sort'] !== undefined && typeof req.query['sort'] === 'string' && req.query['sort'] === 'desc') {
-        sort = 'desc';
-    }
-    // 削除済みかそうではないか
-    let delFlg = 0;
-    if (req.query && req.query['task-status'] !== undefined && typeof req.query['task-status'] === 'string' && req.query['task-status'] === '1') {
-        delFlg = 1;
-    }
+    const {searchText,sort,delFlg} = parseTaskQuery(req.query);
+
 
     // 1週間前と今日の日付を取得
     const todayDate = new Date();
@@ -105,22 +93,7 @@ export const showDetail = async (req:Request, res:Response, next:NextFunction) =
         task.del_flg = task.del_flg ? 1 : 0;
 
         // 戻るボタンを押したときに前回の検索条件を保持
-        // 検索したい文字列があるなら取得
-        let searchText = '';
-        if (req.query && req.query['search'] !== undefined && typeof req.query['search'] === 'string') {
-            searchText = req.query['search'];
-        }
-        
-        // 期限の昇順・降順を取得(デフォルトは昇順)
-        let sort = 'asc';
-        if (req.query && req.query['sort'] !== undefined && typeof req.query['sort'] === 'string' && req.query['sort'] === 'desc') {
-            sort = 'desc';
-        }
-        // 削除済みかそうではないか
-        let delFlg = 0;
-        if (req.query && req.query['task-status'] !== undefined && typeof req.query['task-status'] === 'string' && req.query['task-status'] === '1') {
-            delFlg = 1;
-        }
+        const {searchText,sort,delFlg} = parseTaskQuery(req.query);
 
 
         res.render('task-detail',{task, today, oneWeekLater,searchText,delFlg,sort}); 
@@ -190,10 +163,14 @@ export const del = async (req:Request, res:Response,next:NextFunction) =>{
         // 削除するidの一覧を取得
         const ids:Array<string>  = req.body.ids;
         const userId = (req.user as User).id;
+        
+        // 前回の検索条件を保持する情報を取得
+        const {searchText,sort,delFlg} = parseTaskQuery(req.body);
 
         // 送信件数が0件の場合
         if (!req.body.ids || typeof req.body.ids !== 'object' || !Array.isArray(req.body.ids) || req.body.ids.length === 0) {
-            return res.redirect(`/task`);
+            res.redirect(`/task?sort=${sort}&task-status=${delFlg}${searchText !== '' ? `&search=${encodeURIComponent(searchText)}` : ''}`);
+            return;
         }
 
         // 一括の取得
@@ -227,8 +204,9 @@ export const del = async (req:Request, res:Response,next:NextFunction) =>{
         // タスクを削除
         await deleteTask(numberIds);
 
+
         // タスク一覧ページにリダイレクト
-        res.redirect(`/task`);
+        res.redirect(`/task?sort=${sort}&task-status=${delFlg}${searchText !== '' ? `&search=${encodeURIComponent(searchText)}` : ''}`);
     } catch (err) {
             console.error(err);
             const error = new Error() as any;
@@ -246,9 +224,13 @@ export const restore = async (req:Request, res:Response,next:NextFunction) =>{
         const ids:Array<string>  = req.body.ids;
         const userId = (req.user as User).id;
 
+        // 前回の検索条件を保持する情報を取得
+        const {searchText,sort,delFlg} = parseTaskQuery(req.body);
+
         // 送信件数が0件の場合
         if (!req.body.ids || typeof req.body.ids !== 'object' || !Array.isArray(req.body.ids) || req.body.ids.length === 0) {
-            return res.redirect(`/task`);
+            res.redirect(`/task?sort=${sort}&task-status=${delFlg}${searchText !== '' ? `&search=${encodeURIComponent(searchText)}` : ''}`);
+            return;
         }
 
         // 一括の取得
@@ -281,8 +263,12 @@ export const restore = async (req:Request, res:Response,next:NextFunction) =>{
 
         // タスクの復元
         await restoreTask(numberIds);
+
+
+
         // タスク一覧ページにリダイレクト
-        res.redirect(`/task`);
+        res.redirect(`/task?sort=${sort}&task-status=${delFlg}${searchText !== '' ? `&search=${encodeURIComponent(searchText)}` : ''}`);
+
     } catch (err) {
             console.error(err);
             const error = new Error() as any;

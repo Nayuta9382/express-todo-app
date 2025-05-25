@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import bcrypt from 'bcrypt';
 import { insertUser, updateUser, userSelectById } from '../models/userModel';
-import { RowDataPacket } from 'mysql2';
 import { deleteFileIfExists, upload } from '../utils/upload';
 import { renderWithSessionClear } from '../utils/renderWithSessionClear';
 import { handleValidationErrors } from '../utils/handleValidationErrors';
@@ -123,7 +122,7 @@ export const insert =  async (req: Request, res: Response, next: NextFunction) =
 		const { id, name, password,confirmPassword } = req.body; // POSTデータを取得
 
 		// IDの重複を確認
-		const existingUser :RowDataPacket | null = await userSelectById(id);
+		const existingUser : User | null = await userSelectById(id);
 		// 重複IDが存在する場合
 		if (existingUser) {
 			req.flash('idError', 'このIDはすでに登録されています。');

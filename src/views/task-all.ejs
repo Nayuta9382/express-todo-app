@@ -24,6 +24,9 @@
         
         <form action="/task/<%= delFlg === 1 ? 'restore' : 'delete' %>" class="scrollbar-wrapper  list-data p-0 m-0 d-flex flex-column gap-2 " method="post">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <input type="hidden" name="sort" value="<%= sort %>">
+            <input type="hidden" name="task-status" value="<%= delFlg %>">
+            <input type="hidden" name="searchText" value="<%= searchText && searchText !== searchText ? searchText : '' %>">
             <% if (delFlg === 1) { %>
                 <button class="d-block btn text-white  border-0 text-nowrap mb-1 ms-auto   button bg-red sm-link"  type="submit">完了を取り消す</button>
             <% } else { %>

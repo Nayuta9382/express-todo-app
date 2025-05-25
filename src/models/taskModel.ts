@@ -1,8 +1,9 @@
 import { QueryResult } from 'pg';
 import db from '../db'; // DB接続をインポート
+import { Task } from '../types/task';
 
 // タスクの全件取得(削除されていない)
-export const getTaskAll = async (id: string, searchText: string, sort: string, delFlg: number): Promise<any[]> => {
+export const getTaskAll = async (id: string, searchText: string, sort: string, delFlg: number): Promise<Task[]> => {
   try {
     const orderBy = sort === 'asc' ? 'ORDER BY deadline ASC' : 'ORDER BY deadline DESC';
     // ワイルドカード文字をエスケープ
@@ -20,7 +21,7 @@ export const getTaskAll = async (id: string, searchText: string, sort: string, d
 };
 
 // id検索によるタスク情報取得
-export const selectTaskById = async (id: number): Promise<any | null> => {
+export const selectTaskById = async (id: number): Promise<Task | null> => {
     try {
         const result = await db.query('SELECT id, user_id, title, detail, del_flg, TO_CHAR(deadline, \'YYYY-MM-DD\') AS deadline FROM tasks WHERE id = $1', [id]);
         if (result.rows.length === 0) {
@@ -37,7 +38,7 @@ export const selectTaskById = async (id: number): Promise<any | null> => {
 
 
 // id複数検索によるタスク情報取得
-export const selectTasksByIds = async (ids: number[]): Promise<any[] | null> => {
+export const selectTasksByIds = async (ids: number[]): Promise<Task[] | null> => {
     try {
         if (ids.length === 0) return null;
         const placeholders = ids.map((_, i) => `$${i + 1}`).join(',');
