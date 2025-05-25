@@ -10,7 +10,7 @@ export const getTaskAll = async (id: string, searchText: string, sort: string, d
     const escapedSearchText = searchText.replace(/([%_\\])/g, '\\$1');
     const sql = `SELECT id, user_id, title, detail, TO_CHAR(deadline, 'YYYY-MM-DD') AS deadline FROM tasks WHERE user_id = $1 AND del_flg = $2 AND title ILIKE $3 ESCAPE '\\' ${orderBy} `;
     const delFlgBoolean = delFlg === 1 ? true : false;
-    const result: QueryResult = await db.query(sql, [id, delFlg, `%${escapedSearchText}%`]);
+    const result: QueryResult = await db.query(sql, [id, delFlgBoolean, `%${escapedSearchText}%`]);
     return result.rows;
   } catch (err) {
     console.error(err);
