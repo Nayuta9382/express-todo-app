@@ -50,7 +50,7 @@
                         <% } else if(delFlg !== 1 && deadlineDate < oneWeekLater){ %>
                         &#9888;&#65039;
                         <% } %>
-                        <a class="text-dark interactive" href="/task/detail/<%= task.id %>"><%= task.title %></a>
+                        <a class="text-dark interactive" href="/task/detail/<%= task.id %>?sort=<%=sort%>&task-status=<%= delFlg === 1 ? 1 : 0 %><%= searchText !== '' ? `&search=${searchText}` : '' %>"><%= task.title %></a>
                     </li>
                     <%
                     const dateStr = task.deadline;

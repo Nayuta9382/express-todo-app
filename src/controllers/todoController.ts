@@ -21,6 +21,7 @@ export const showTodoList = async (req:Request, res:Response, next:NextFunction)
     if (req.query && req.query['sort'] !== undefined && typeof req.query['sort'] === 'string' && req.query['sort'] === 'desc') {
         sort = 'desc';
     }
+    // 削除済みかそうではないか
     let delFlg = 0;
     if (req.query && req.query['task-status'] !== undefined && typeof req.query['task-status'] === 'string' && req.query['task-status'] === '1') {
         delFlg = 1;
@@ -102,7 +103,27 @@ export const showDetail = async (req:Request, res:Response, next:NextFunction) =
         // 改行コードを<br>に変換
         task.detail = escaped.replace(/\r?\n/g, '<br>');
         task.del_flg = task.del_flg ? 1 : 0;
-        res.render('task-detail',{task, today, oneWeekLater}); 
+
+        // 戻るボタンを押したときに前回の検索条件を保持
+        // 検索したい文字列があるなら取得
+        let searchText = '';
+        if (req.query && req.query['search'] !== undefined && typeof req.query['search'] === 'string') {
+            searchText = req.query['search'];
+        }
+        
+        // 期限の昇順・降順を取得(デフォルトは昇順)
+        let sort = 'asc';
+        if (req.query && req.query['sort'] !== undefined && typeof req.query['sort'] === 'string' && req.query['sort'] === 'desc') {
+            sort = 'desc';
+        }
+        // 削除済みかそうではないか
+        let delFlg = 0;
+        if (req.query && req.query['task-status'] !== undefined && typeof req.query['task-status'] === 'string' && req.query['task-status'] === '1') {
+            delFlg = 1;
+        }
+
+
+        res.render('task-detail',{task, today, oneWeekLater,searchText,delFlg,sort}); 
     } catch (err) {
             console.error(err);
             const error = new Error() as any;
