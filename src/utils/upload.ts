@@ -6,7 +6,6 @@ import { supabase } from '../utils/supabase';
 const storage = multer.diskStorage({
     // 保存先の設定
     destination: (req,file,cb) =>{
-        // const uploadPath = 'public/uploads/';
         const uploadPath = '/tmp/uploads/';
         // アップロード先が存在しない場合ディレクトリを作成
         if(!fs.existsSync(uploadPath)){
@@ -49,7 +48,6 @@ export const upload = multer({
 
 // 古い画像を削除
 export async function deleteFileIfExists(relativePath: string): Promise<void>  {
-    // const uploadDir = path.join(__dirname, '../../public/');
     const uploadDir = '/tmp/uploads';
     const filePath = path.normalize(path.join(uploadDir, relativePath));
     

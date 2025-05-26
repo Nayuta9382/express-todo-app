@@ -250,7 +250,6 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
                     
 
                     // /tmp/uploads/ に保存されているローカルファイルパスを作る
-                    // const localFilePath = path.join(__dirname+'/../../public/uploads/',req.file.filename);
                     const localFilePath = path.join('/tmp/uploads/',req.file.filename);
     
                     // ファイルの内容を読み込む
@@ -266,7 +265,6 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
                         });
 
                     // 一時ファイル削除
-                    // await deleteFileIfExists(`uploads/${req.file.filename}`);
                     await deleteFileIfExists(`${req.file.filename}`);
 
                      if (uploadError) {
