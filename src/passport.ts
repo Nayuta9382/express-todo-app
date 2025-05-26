@@ -95,10 +95,13 @@ passport.deserializeUser(async (id: string, done) => {
 
             // 画像が存在しない
             if (error) {
-                user.img_path = '/uploads/default-img.png';
-            } 
+                user.img_path = process.env.SUPABASE_URL+'/storage/v1/object/public/avatars' + '/uploads/default-img.png';
+            }else{
+                // 画像が存在する
+                user.img_path = process.env.SUPABASE_URL+'/storage/v1/object/public/avatars' + user.img_path;
+            }
         } catch {
-            user.img_path = '/uploads/default-img.png';
+                user.img_path = process.env.SUPABASE_URL+'/storage/v1/object/public/avatars' + '/uploads/default-img.png';
         }
 
         done(null, user);  // ユーザー情報を復元

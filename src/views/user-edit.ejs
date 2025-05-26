@@ -27,7 +27,7 @@
             </div>
         <% } %>
         <div id="profile-img-frame" class="d-flex flex-column justify-content-between gap-3 p-3 border rounded" >
-            <img id="profile-img-edit" src="<%= SUPABASE_URL %><%= user.img_path %>" alt="プロフィール画像" class="img-fluid rounded">
+            <img id="profile-img-edit" src="<%= user.img_path %>" alt="プロフィール画像" class="img-fluid rounded">
             <div id="img-fluid-dummy" class="d-flex justify-content-center align-items-center none"><p>画像ファイル（jpg, png, gif など）以外は表示できません。</p></div>
             <input id="profile-img-fileInput" type="file" name="profile-img"  accept=".jpg,.jpeg,.png,.gif"  class="form-control" id="profile-img">
         </div>

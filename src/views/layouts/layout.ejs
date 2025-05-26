@@ -35,7 +35,7 @@
         </nav>
         <div class="dropdown user-menu">
             <a href="#" class="interactive d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="<%= SUPABASE_URL %><%= user.img_path %>"  alt="プロフィール画像" width="32" height="32" class="border border-light-gray rounded-circle" id="profile-img-icon">
+                <img src="<%= user.img_path %>"  alt="プロフィール画像" width="32" height="32" class="border border-light-gray rounded-circle" id="profile-img-icon">
             </a>
             <ul class="dropdown-menu dropdown-menu-end"  aria-labelledby="userDropdown">
                 <li><a class="dropdown-item" href="/auth/edit">プロフィール編集</a></li>

@@ -16,7 +16,6 @@ export const ensureAuthenticated =(req: Request, res: Response, next: NextFuncti
 // user情報をすべてのビューに渡す
 export const setUserToLocals = (req: Request, res: Response, next: NextFunction) => {
     res.locals.user = req.user;
-    res.locals.SUPABASE_URL = process.env.SUPABASE_URL+'/storage/v1/object/public/avatars'; 
     next();
 };
 
