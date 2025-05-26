@@ -7,6 +7,7 @@ import fs from 'fs';
 import bcrypt from 'bcrypt';
 import { Request } from 'express';
 import path from 'path';
+import { supabase } from './utils/supabase';
 
 // ローカル戦略の設定
 passport.use(new LocalStrategy(
@@ -84,15 +85,18 @@ passport.deserializeUser(async (id: string, done) => {
         if (user.img_path.startsWith('http://') || user.img_path.startsWith('https://')) {
             return done(null, user);
         }
-
-        // ローカルに画像がない場合デフォルト画像を表示
-        const safeFilename = path.basename(user.img_path || '');
-        const uploadDir = path.join(__dirname, '../public/uploads/');
-        const profileImagePath = path.join(uploadDir, safeFilename);
-        
         
         try {
-            await fs.promises.access(profileImagePath, fs.constants.F_OK);
+            // 画像が見つからない場合画像がない場合デフォルト画像を表示
+            const { data, error } = await supabase
+            .storage
+            .from('avatars') // バケット名
+            .download(user.img_path); // パス
+
+            // 画像が存在しない
+            if (error) {
+                user.img_path = '/uploads/default-img.png';
+            } 
         } catch {
             user.img_path = '/uploads/default-img.png';
         }

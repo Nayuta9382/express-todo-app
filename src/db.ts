@@ -12,9 +12,9 @@ const db: Pool = new Pool({
     port: Number(process.env.DB_PORT),
     max: 15,
     idleTimeoutMillis: 30000, // 30秒接続なして遮断
-    ssl: {
-        rejectUnauthorized: false 
-    }
+    // ssl: {
+    //     rejectUnauthorized: false 
+    // }
 });
 // 接続関数を明示的に呼び出す用に定義
 export const connectDB = async () => {

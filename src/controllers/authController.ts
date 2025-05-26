@@ -8,6 +8,10 @@ import { handleValidationErrors } from '../utils/handleValidationErrors';
 import { validateUpdateUser } from '../validators/updateUserValidator';
 import { User } from '../types/user';
 import csrf from 'csurf';
+import { supabase } from '../utils/supabase';
+import fs from 'fs';
+import path from 'path';
+
 
 
 const csrfProtection = csrf();
@@ -231,15 +235,55 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
                 if (req.file) {
                     // 既に保存されているデフォルト画像以外の画像を削除
                     if (user?.img_path && user.img_path.startsWith('/uploads/') && user.img_path !== '/uploads/default-img.png') {
-                        await deleteFileIfExists(user.img_path);
+                        // await deleteFileIfExists(user.img_path);
+                        
+                        const oldFilePath = user.img_path.replace('/uploads/', 'uploads/');
+                        
+                        const { error } = await supabase.storage
+                            .from('avatars') //  バケット名
+                            .remove([oldFilePath]); // ディレクトリ/ファイル名を指定
+
+                        //　古い画像の削除に失敗 
+                        if (error) {
+                            console.error('古い画像の削除に失敗しました:', error.message);
+                        }
                     }
                     
-                    filePath = `/uploads/${req.file.filename}`;
+                    // filePath = `/uploads/${req.file.filename}`;
+
+                    // /tmp/uploads/ に保存されているローカルファイルパスを作る
+                    const localFilePath = path.join(__dirname+'/../../public/uploads/',req.file.filename);
+                    // const localFilePath = path.join('/tmp/uploads/',req.file.filename);
+    
+                    // ファイルの内容を読み込む
+                    const fileBuffer = await fs.promises.readFile(localFilePath);
+                    const supabaseFilePath = `uploads/${req.file.filename}`;
+
+                     // Supabase ストレージへアップロード
+                    const { error: uploadError } = await supabase.storage
+                        .from('avatars') // バケット名に置き換えてください
+                        .upload(supabaseFilePath, fileBuffer, {
+                            contentType: req.file.mimetype,
+                            upsert: true,
+                        });
+
+                    // 一時ファイル削除
+                    await deleteFileIfExists(`uploads/${req.file.filename}`);
+
+                     if (uploadError) {
+                        console.error('Supabaseファイルアップロードエラー:', uploadError);
+                        req.flash('uploadError', 'ファイルのアップロードに失敗しました。');
+                        return res.redirect('/auth/edit');
+                    }
+                    filePath = `/uploads/${req.file.filename}`; 
                 }
 
                 // データベースへの保存処理
                 const { name } = req.body; // POSTデータを取得
-
+                console.log('保存するpath');
+                console.log(filePath);
+                
+                
                 await updateUser(userId, name, filePath);
                 return res.redirect('/task');
             } catch (err) {

@@ -7,12 +7,13 @@
     "build": "NODE_ENV=development tsc && npm run copy:assets",
     "copy:assets": "cp -r public dist/src/public && cp -r src/views dist/src/views",
     "start": "node dist/src/app.js",
-    "dev": "ts-node-dev --respawn src/app.ts"
+    "dev": "ts-node-dev --respawn --transpile-only src/app.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@supabase/supabase-js": "^2.49.8",
     "@types/node": "^22.15.21",
     "bcrypt": "^5.1.1",
     "body-parser": "^2.2.0",

@@ -89,7 +89,7 @@ app.use(passport.session());
 // formからデータを受け取る設定
 app.use(express.urlencoded({extended:true}));
 
-
+const SUPABASE_URL = process.env.SUPABASE_URL ? process.env.SUPABASE_URL : '';
 
 // helmetミドルウェアを使って基本的なセキュリティヘッダーを追加
 app.use(
@@ -100,7 +100,7 @@ app.use(
         scriptSrc: ["'self'", "https://cdn.jsdelivr.net"],  // CDNドメインを追加
         styleSrc: ["'self'", "https://cdn.jsdelivr.net"],   // CDNドメインを追加
         fontSrc: ["'self'", "https://cdn.jsdelivr.net"],    // フォント読み込み用に追加
-        imgSrc: ["'self'", "data:","https://avatars.githubusercontent.com"], // ← GitHubのアバター画像用に追加],                        // 画像でdata URIも許可（Bootstrapのアイコンなど）
+        imgSrc: ["'self'", "data:","https://avatars.githubusercontent.com",`${SUPABASE_URL}/storage/v1/object/public/avatars/`], // ← GitHubのアバター画像用に追加],                        // 画像でdata URIも許可（Bootstrapのアイコンなど）
         objectSrc: ["'none'"],
         baseUri: ["'self'"],
         frameAncestors: ["'self'"],
