@@ -6,8 +6,8 @@ import { supabase } from '../utils/supabase';
 const storage = multer.diskStorage({
     // 保存先の設定
     destination: (req,file,cb) =>{
-        const uploadPath = 'public/uploads/';
-        // const uploadPath = '/tmp/uploads/';
+        // const uploadPath = 'public/uploads/';
+        const uploadPath = '/tmp/uploads/';
         // アップロード先が存在しない場合ディレクトリを作成
         if(!fs.existsSync(uploadPath)){
             fs.mkdirSync(uploadPath,{recursive:true});
