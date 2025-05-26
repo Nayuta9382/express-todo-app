@@ -49,8 +49,8 @@ export const upload = multer({
 
 // 古い画像を削除
 export async function deleteFileIfExists(relativePath: string): Promise<void>  {
-    const uploadDir = path.join(__dirname, '../../public/');
-    // const uploadDir = path.join(__dirname, '/tmp/');
+    // const uploadDir = path.join(__dirname, '../../public/');
+    const uploadDir = '/tmp/uploads';
     const filePath = path.normalize(path.join(uploadDir, relativePath));
     
     // uploads フォルダ外のパスを拒否（ディレクトリトラバーサル対策）

@@ -229,13 +229,12 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
             // ファイルが送信されている場合保存されているファイル名を取得
             try {
                 const userId = (req.user as User).id;
-                const user =     await userSelectById(userId);
+                const user =  await userSelectById(userId);
                 let filePath = user && user.img_path;
 
                 if (req.file) {
                     // 既に保存されているデフォルト画像以外の画像を削除
                     if (user?.img_path && user.img_path.startsWith('/uploads/') && user.img_path !== '/uploads/default-img.png') {
-                        // await deleteFileIfExists(user.img_path);
                         
                         const oldFilePath = user.img_path.replace('/uploads/', 'uploads/');
                         
@@ -249,11 +248,10 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
                         }
                     }
                     
-                    // filePath = `/uploads/${req.file.filename}`;
 
                     // /tmp/uploads/ に保存されているローカルファイルパスを作る
-                    const localFilePath = path.join(__dirname+'/../../public/uploads/',req.file.filename);
-                    // const localFilePath = path.join('/tmp/uploads/',req.file.filename);
+                    // const localFilePath = path.join(__dirname+'/../../public/uploads/',req.file.filename);
+                    const localFilePath = path.join('/tmp/uploads/',req.file.filename);
     
                     // ファイルの内容を読み込む
                     const fileBuffer = await fs.promises.readFile(localFilePath);
@@ -268,7 +266,8 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
                         });
 
                     // 一時ファイル削除
-                    await deleteFileIfExists(`uploads/${req.file.filename}`);
+                    // await deleteFileIfExists(`uploads/${req.file.filename}`);
+                    await deleteFileIfExists(`${req.file.filename}`);
 
                      if (uploadError) {
                         console.error('Supabaseファイルアップロードエラー:', uploadError);
