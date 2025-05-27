@@ -277,8 +277,6 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
 
                 // データベースへの保存処理
                 const { name } = req.body; // POSTデータを取得
-                console.log('保存するpath');
-                console.log(filePath);
                 
                 
                 await updateUser(userId, name, filePath);
