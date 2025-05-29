@@ -63,8 +63,11 @@ footer{
 .bg-red{
     background-color: #f65c5a;
 }
-.bg-red:hover{
+.bg-red:hover,.bg-red:focus-visible{
     background-color: #f97b79;
+}
+.bg-red:focus-visible{
+    box-shadow:0 0 0 3.5px rgba(253, 162, 161, 0.7);
 }
 .bg-red:active{
     background-color: #f65c5a!important;
@@ -73,8 +76,12 @@ footer{
 .bg-blue{
     background-color: #6593ef;
 }
-.bg-blue:hover{
+.bg-blue:hover,.bg-blue:focus-visible{
     background-color: rgba(98, 145, 240, 0.8);
+}
+.bg-blue:focus-visible{
+    box-shadow:0 0 0 3.5px rgba(121, 161, 241, 0.5);
+
 }
 .bg-blue:active{
     background-color: #6593ef!important;
@@ -162,18 +169,26 @@ li{
     background-color: #ffffff;
     border: 1px solid ;
 }
-.back-button:hover{
+.back-button:hover,.back-button:focus-visible{
     background-color: #ffffff;
     border: 1px solid #c0c0c5;
     color: #706f6f;
+}
+.back-button:focus-visible{
+    box-shadow:0 0 0 3.5px rgba(186, 188, 188, 0.4);
+
 }
 .select-btn{
     background-color: #6593ef;
     width: 90px;
 
 }
-.select-btn:hover{
+.select-btn:hover,.select-btn:focus-visible{
     background-color: rgba(98, 145, 240, 0.8);
+}
+.back-select-btn:focus-visible{
+    box-shadow:0 0 0 3.5px rgba(98, 145, 240, 0.5);
+
 }
 .select-btn:active{
     background-color: #6593ef!important;
@@ -184,7 +199,7 @@ li{
     background-color: white;
     width: 90px;
 }
-.select-btn-no:hover{
+.select-btn-no:hover,.select-btn-no:focus-visible{
     color: rgb(0,0,0,0.7)!important;
     background-color: rgb(244, 242, 242,0.34);
     border: 2px solid rgba(101, 147, 239, 0.7);
@@ -199,6 +214,10 @@ li{
     border: 2px solid #6593ef;
 }
 
+.nav-link:focus-visible{
+    box-shadow:0 0 0 2px rgba(0, 0, 0, 1);
+    border-radius: 2px; 
+}
 
 .list-title{
     flex-grow: 1;
