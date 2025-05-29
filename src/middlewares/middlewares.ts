@@ -54,10 +54,15 @@ export const loginLimiter = (
         max: 5, // 5回まで
         standardHeaders: true,
         legacyHeaders: false,
+        keyGenerator: (req: Request) => {
+            return req.headers['x-forwarded-for']?.toString().split(',')[0].trim() || 
+                   req.socket.remoteAddress || 
+                   req.ip || 
+                   'unknown';
+        },
         handler: (req: Request, res: Response) => {
             req.flash('error', 'ログイン試行が多すぎます。しばらくしてから再試行してください。');
-            res.redirect('/auth/login');
-
+            res.status(429).redirect('/auth/login');
         }
     });
 };
